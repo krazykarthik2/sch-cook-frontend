@@ -1,13 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+
+  .card {
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.xl');
+    padding: theme('spacing.6');
+    box-shadow: theme('boxShadow.xl');
+  }
+  button,.btn{
+    background-color: theme('colors.rose.500');
+    border-radius: theme('borderRadius.xl');
+    color:theme('colors.white');
+    padding: theme('spacing.2') theme('spacing.5');
+    box-shadow: theme('boxShadow.xl');
+  }
+  .disabled{
+    pointer-events: none;
+    opacity: .6;
+    filter: blur(.5px);
+  }
+  /* ... */
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+#root {
 }

@@ -9,6 +9,7 @@ const EmployeeCreate = () => {
     e.preventDefault();
     try {
       await employee.create({ name, emp_id });
+      setEmpId("");
       setName("");
     } catch (error) {
       console.error("Error creating employee:", error);
@@ -17,15 +18,26 @@ const EmployeeCreate = () => {
 
   return (
     <div>
-      <h2>Create Employee</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className=" flex flex-col gap-3 p-5 card m-5"
+      >
+        <h2 className="title">Create Employee</h2>
+        <label htmlFor="id" className="font-I">
+          Employee id
+        </label>
         <input
+          id="id"
           type="text"
-          value={name}
+          value={emp_id}
           onChange={(e) => setEmpId(e.target.value)}
           placeholder="employee id"
         />
+        <label htmlFor="name" className="font-I">
+          Employee Name
+        </label>
         <input
+          id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}

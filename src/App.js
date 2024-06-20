@@ -5,6 +5,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
 import "./index.css";
 import "./fonts.css";
+const BranchcodeCreate   =lazy(()=>import( "./components/Branchcode/BranchcodeCreate"))
+const BranchcodeDelete  =lazy(()=>import( "./components/Branchcode/BranchcodeDelete"))
+const BranchcodeEdit  =lazy(()=>import( "./components/Branchcode/BranchcodeEdit"))
+const BranchcodeSingle   =lazy(()=>import( "./components/Branchcode/BranchcodeSingle"))
+const BranchcodeList  =lazy(()=>import( "./components/Branchcode/BranchcodeList"))
 
 // Lazy load components
 const EmployeeCreate = lazy(() =>
@@ -91,24 +96,37 @@ function App() {
               <Route path="" element={<BranchList />} />
               <Route path=":id" element={<BranchSingle />} />
             </Route>
-          </Route>
-          <Route path=":branch_id/section">
-            <Route path="create" element={<SectionCreate />} />
-            <Route path="edit">
-              <Route path=":id" element={<SectionEdit />} />
-            </Route>
-            <Route path="delete">
-              <Route path=":id" element={<SectionDelete />} />
-            </Route>
-            <Route path=":section_id">
-              <Route path="timetable">
-                <Route path="get" element={<TimetableGet />} />
-                <Route path="edit" element={<TimetableEdit />} />
-                <Route path="delete" element={<TimetableDelete />} />
+
+            <Route path=":branch_id/section">
+              <Route path="create" element={<SectionCreate />} />
+              <Route path="edit">
+                <Route path=":id" element={<SectionEdit />} />
+              </Route>
+              <Route path="delete">
+                <Route path=":id" element={<SectionDelete />} />
+              </Route>
+              <Route path=":section_id">
+                <Route path="timetable">
+                  <Route path="get" element={<TimetableGet />} />
+                  <Route path="edit" element={<TimetableEdit />} />
+                  <Route path="delete" element={<TimetableDelete />} />
+                </Route>
               </Route>
             </Route>
           </Route>
-
+          <Route path="branchcode">
+            <Route path="create" element={<BranchcodeCreate />} />
+            <Route path="edit">
+              <Route path=":branch_code" element={<BranchcodeEdit />} />
+            </Route>
+            <Route path="delete">
+              <Route path=":branch_code" element={<BranchcodeDelete />} />
+            </Route>
+            <Route path="get">
+              <Route path="" element={<BranchcodeList />} />
+              <Route path=":branch_code" element={<BranchcodeSingle />} />
+            </Route>
+          </Route>
           {/* Subject Routes */}
           <Route path="/subject">
             <Route path="create" element={<SubjectCreate />} />

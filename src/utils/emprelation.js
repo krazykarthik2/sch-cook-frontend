@@ -23,7 +23,8 @@ async function edit(id, {  emp_id, branch_id, sec_id, subject_id }) {
     .forEach((e) => {
       opt = { e, ...opt };
     });
-  return await axios.put(URLbase + `/relation/edit/${id}`, opt);
+    
+  return await axios.post(URLbase + `/relation/edit/${id}`, opt);
 }
 const emprelation = { create, get, getAll, edit };
 export default emprelation;

@@ -17,6 +17,13 @@ const routes = {
     get: "/branch/get",
     id: "/branch/get/:id",
   },
+  branchcode: {
+    create: "/branchcode/create",
+    edit: "/branchcode/edit/:branch_code",
+    delete: "/branchcode/delete/:branch_code",
+    get: "/branchcode/get",
+    id: "/branchcode/get/:branch_code",
+  },
   section: {
     create: "/branch/:branch_id/section/create",
     edit: "/branch/:branch_id/section/edit/:id",
@@ -43,8 +50,7 @@ const routes = {
 };
 function LinkBtn({ name, to }) {
   return (
-    <Link to={to} class={"btn "+(to.includes(':')?"disabled":"")}>
-
+    <Link to={to} className={"btn " + (to.includes(":") ? "disabled" : "")}>
       {name}
     </Link>
   );
@@ -54,8 +60,8 @@ function Card({ title, val }) {
     <div className="card flex flex-col gap-2">
       <h2>{title}</h2>
       <div className="flex flex-wrap gap-2">
-        {Object.keys(val).map((e) => (
-          <LinkBtn to={val[e]} name={e} />
+        {Object.keys(val).map((e, i) => (
+          <LinkBtn key={i} to={val[e]} name={e} />
         ))}
       </div>
     </div>
@@ -67,7 +73,7 @@ function Menu() {
       <h1 className="text-2xl">Menu</h1>
       <div className="cards mt-4 flex flex-col w-full gap-2">
         {Object.keys(routes).map((e, i) => (
-          <Card title={e} val={routes[e]} />
+          <Card key={i} title={e} val={routes[e]} />
         ))}
       </div>
     </main>

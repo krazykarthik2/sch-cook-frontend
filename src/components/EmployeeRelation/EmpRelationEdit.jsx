@@ -3,6 +3,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import emprelation from '../../utils/emprelation';
 
 const EmpRelationEdit = () => {
     const { id } = useParams();
@@ -27,7 +28,7 @@ const EmpRelationEdit = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`/relation/edit/${id}`, relation)
+        emprelation.edit(id,relation)
             .then(() => navigate('/relation/get'))
             .catch(error => console.error('Error updating relation:', error));
     };

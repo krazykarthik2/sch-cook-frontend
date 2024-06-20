@@ -23,7 +23,7 @@ async function edit(id, { name, branch_id }) {
     .forEach((e) => {
       opt = { e, ...opt };
     });
-  return await axios.put(URLbase + `/branch/edit/${id}`, opt);
+  return await axios.post(URLbase + `/branch/edit/${id}`, opt);
 }
 const branch = { create, get,getAll ,edit};
 export default branch;

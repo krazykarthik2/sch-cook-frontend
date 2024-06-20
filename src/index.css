@@ -2,24 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
-
+  .d-center {
+    @apply flex items-center justify-center;
+  }
+  table,
+  .table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    tr:hover,
+    .tr:hover {
+      @apply bg-rose-500 !important;
+    }
+    tr,
+    .tr {
+      @apply text-white bg-blue-500;
+    }
+    tr:nth-child(odd),
+    .tr:nth-child(odd) {
+      @apply bg-gray-500;
+    }
+    td,
+    .td,
+    th,
+    .th {
+      border: 1px solid #000;
+    }
+  }
   .card {
-    background-color: theme('colors.white');
-    border-radius: theme('borderRadius.xl');
-    padding: theme('spacing.6');
-    box-shadow: theme('boxShadow.xl');
+    background-color: theme("colors.white");
+    border-radius: theme("borderRadius.xl");
+    padding: theme("spacing.6");
+    box-shadow: theme("boxShadow.xl");
   }
-  button,.btn{
-    background-color: theme('colors.rose.500');
-    border-radius: theme('borderRadius.xl');
-    color:theme('colors.white');
-    padding: theme('spacing.2') theme('spacing.5');
-    box-shadow: theme('boxShadow.xl');
+  button,
+  .btn {
+    background-color: theme("colors.rose.500");
+    border-radius: theme("borderRadius.xl");
+    color: theme("colors.white");
+    padding: theme("spacing.2") theme("spacing.5");
+    box-shadow: theme("boxShadow.xl");
   }
-  .disabled{
+  .disabled {
     pointer-events: none;
-    opacity: .6;
-    filter: blur(.5px);
+    opacity: 0.6;
+    filter: blur(0.5px);
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+    background-color: theme("colors.white");
+    border: 1px solid theme("colors.gray.300");
+    border-radius: theme("borderRadius.md");
+    padding: theme("spacing.2");
+    box-shadow: theme("boxShadow.md");
+    color: theme("colors.gray.800");
+    font-size: theme("fontSize.base");
+    width: 100%;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  .title {
+    font-size: theme("fontSize.2xl");
   }
   /* ... */
 }

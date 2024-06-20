@@ -17,7 +17,7 @@ async function edit(branch_id,sec_id, { name }) {
     .forEach((e) => {
       opt = { e, ...opt };
     });
-  return await axios.put(
+  return await axios.post(
     URLbase + `/branch/${branch_id}/section/edit/${sec_id}`,
     opt
   );

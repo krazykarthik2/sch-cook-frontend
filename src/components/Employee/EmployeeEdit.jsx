@@ -23,8 +23,9 @@ const EmployeeEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await employee.edit(id, { name });
-      navigate("/employees");
+      employee.edit(id, { name }).then((e) => {
+        if (e) navigate("/employee/get");
+      });
     } catch (error) {
       console.error("Error editing employee:", error);
     }

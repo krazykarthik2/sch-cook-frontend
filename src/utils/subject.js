@@ -23,7 +23,7 @@ async function edit(id, { subject_name }) {
     .forEach((e) => {
       opt = { e, ...opt };
     });
-  return await axios.put(URLbase + `/subject/edit/${id}`, opt);
+  return await axios.post(URLbase + `/subject/edit/${id}`, opt);
 }
 const subject = { create, get, getAll, edit };
 export default subject;

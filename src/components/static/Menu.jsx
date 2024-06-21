@@ -33,6 +33,8 @@ const routes = {
     delete: "/branch/:branch_id/section/:section_id/timetable/delete",
   },
   subject: {
+    get: "/subject/get",
+    id: "/subject/get/:id",
     create: "/subject/create",
     edit: "/subject/edit/:id",
     delete: "/subject/delete/:id",

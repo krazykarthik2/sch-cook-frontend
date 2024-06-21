@@ -6,15 +6,13 @@ import subject from "../../utils/subject";
 const SubjectEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [subjectId, setSubjectId] = useState("");
   const [subjectName, setSubjectName] = useState("");
 
   useEffect(() => {
     const fetchSubject = async () => {
       try {
         const response = await subject.get(id);
-        setSubjectId(response.data.subject_id);
-        setSubjectName(response.data.subject_name);
+        setSubjectName(response.data.name);
       } catch (error) {
         console.error("Error fetching subject:", error);
       }
@@ -25,8 +23,8 @@ const SubjectEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await subject.edit(id, { subject_name: subjectName });
-      navigate("/subjects");
+      await subject.edit(id, { name: subjectName });
+      navigate("/subject/get");
     } catch (error) {
       console.error("Error editing subject:", error);
     }
@@ -34,14 +32,8 @@ const SubjectEdit = () => {
 
   return (
     <div>
-      <h2>Edit Subject</h2>
+      <h2>Edit Subject</h2> 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={subjectId}
-          onChange={(e) => setSubjectId(e.target.value)}
-          placeholder="Subject ID"
-        />
         <input
           type="text"
           value={subjectName}

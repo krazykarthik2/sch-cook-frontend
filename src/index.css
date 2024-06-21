@@ -5,6 +5,12 @@
   .d-center {
     @apply flex items-center justify-center;
   }
+  input[type="checkbox"]{
+    @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600;
+  }
+  .text-muted{
+    @apply text-gray-700 pointer-events-none
+  }
   table,
   .table {
     border: 1px solid #000;
@@ -34,14 +40,15 @@
     padding: theme("spacing.6");
     box-shadow: theme("boxShadow.xl");
   }
-  button,
-  .btn {
+  button:not(.unbtn),
+  .btn:not(.unbtn) {
     background-color: theme("colors.rose.500");
     border-radius: theme("borderRadius.xl");
     color: theme("colors.white");
     padding: theme("spacing.2") theme("spacing.5");
     box-shadow: theme("boxShadow.xl");
   }
+  
   .disabled {
     pointer-events: none;
     opacity: 0.6;

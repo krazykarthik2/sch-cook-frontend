@@ -1,29 +1,32 @@
 import axios from "axios";
 import backend from "./backend.json";
 const URLbase = backend.URLbase;
-async function create({ subject_id, subject_name }) {
-  let opt = {};
-  [(subject_id, subject_name)]
-    .filter((e) => e)
-    .forEach((e) => {
-      opt = { e, ...opt };
-    });
-  return await axios.post(URLbase + `/subject/create`, opt);
+async function create({ subject_id, name }) {
+
+  return await axios.post(URLbase + `/subject/create`, {name,subject_id});
 }
-async function getAll() {
-  return await axios.get(URLbase + `/subject/get`);
+async function getSome(arr) {
+  let request_arr = Array.from(new Set(arr));
+  console.log(request_arr);
+  const opt = {
+    get: request_arr,
+  };
+  return await axios.get(URLbase + `/subject/get`, opt);
+}
+async function getAll(arr) {
+  if (arr) {
+    if (arr.length) return await getSome(arr);
+  } else return await axios.get(URLbase + `/subject/get`);
 }
 async function get(id) {
   return await axios.get(URLbase + `/subject/get/${id}`);
 }
-async function edit(id, { subject_name }) {
-  let opt = {};
-  [subject_name]
-    .filter((e) => e)
-    .forEach((e) => {
-      opt = { e, ...opt };
-    });
-  return await axios.post(URLbase + `/subject/edit/${id}`, opt);
+async function edit(id, { name }) {
+  return await axios.post(URLbase + `/subject/edit/${id}`, { name });
 }
-const subject = { create, get, getAll, edit };
+
+async function _delete(id) {
+  return await axios.delete(URLbase + `/subject/delete/${id}`);
+}
+const subject = { create, get, getAll, edit, _delete };
 export default subject;

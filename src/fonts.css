@@ -8,6 +8,7 @@
 }
 h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,button,.btn,.font-I,th,.th{
     font-family: Integral;
+    @apply tracking-wide
 }
 p,.p,.font-M,input,td,.td{
     font-family: Montaga;

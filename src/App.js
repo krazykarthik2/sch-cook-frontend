@@ -5,11 +5,23 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
 import "./index.css";
 import "./fonts.css";
-const BranchcodeCreate   =lazy(()=>import( "./components/Branchcode/BranchcodeCreate"))
-const BranchcodeDelete  =lazy(()=>import( "./components/Branchcode/BranchcodeDelete"))
-const BranchcodeEdit  =lazy(()=>import( "./components/Branchcode/BranchcodeEdit"))
-const BranchcodeSingle   =lazy(()=>import( "./components/Branchcode/BranchcodeSingle"))
-const BranchcodeList  =lazy(()=>import( "./components/Branchcode/BranchcodeList"))
+import SubjectList from "./components/Subject/SubjectList";
+import SubjectSingle from "./components/Subject/SubjectSingle";
+const BranchcodeCreate = lazy(() =>
+  import("./components/Branchcode/BranchcodeCreate")
+);
+const BranchcodeDelete = lazy(() =>
+  import("./components/Branchcode/BranchcodeDelete")
+);
+const BranchcodeEdit = lazy(() =>
+  import("./components/Branchcode/BranchcodeEdit")
+);
+const BranchcodeSingle = lazy(() =>
+  import("./components/Branchcode/BranchcodeSingle")
+);
+const BranchcodeList = lazy(() =>
+  import("./components/Branchcode/BranchcodeList")
+);
 
 // Lazy load components
 const EmployeeCreate = lazy(() =>
@@ -33,6 +45,7 @@ const BranchDelete = lazy(() => import("./components/Branch/BranchDelete"));
 const BranchList = lazy(() => import("./components/Branch/BranchList"));
 const BranchSingle = lazy(() => import("./components/Branch/BranchSingle"));
 
+const SectionsGet = lazy(() => import("./components/Section/SectionsGet"));
 const SectionCreate = lazy(() => import("./components/Section/SectionCreate"));
 const SectionEdit = lazy(() => import("./components/Section/SectionEdit"));
 const SectionDelete = lazy(() => import("./components/Section/SectionDelete"));
@@ -98,12 +111,13 @@ function App() {
             </Route>
 
             <Route path=":branch_id/section">
+              <Route path="" element={<SectionsGet />}/>
               <Route path="create" element={<SectionCreate />} />
               <Route path="edit">
-                <Route path=":id" element={<SectionEdit />} />
+                <Route path=":section_id" element={<SectionEdit />} />
               </Route>
               <Route path="delete">
-                <Route path=":id" element={<SectionDelete />} />
+                <Route path=":section_id" element={<SectionDelete />} />
               </Route>
               <Route path=":section_id">
                 <Route path="timetable">
@@ -128,7 +142,11 @@ function App() {
             </Route>
           </Route>
           {/* Subject Routes */}
-          <Route path="/subject">
+          <Route path="/subject"> 
+            <Route path="get">
+              <Route path="" element={<SubjectList />} />
+              <Route path=":id" element={<SubjectSingle />} />
+              </Route>
             <Route path="create" element={<SubjectCreate />} />
             <Route path="edit">
               <Route path=":id" element={<SubjectEdit />} />

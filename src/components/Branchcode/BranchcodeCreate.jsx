@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import branchcode from '../../utils/branchcode';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const BranchcodeCreate = ({  }) => {
   const [branchCode, setBranchCode] = useState('');
   const [name, setName] = useState('');
-
+const location = useLocation()
+const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     await branchcode.create({ branch_code: branchCode, name:name });
     setBranchCode('');
     setName('');
+    navigate(location.state.__continue||"/branchcode/get");
   };
 
   return (

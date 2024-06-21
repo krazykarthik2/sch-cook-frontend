@@ -9,7 +9,7 @@ const SubjectCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await subject.create({ subject_id: subjectId, subject_name: subjectName });
+      await subject.create({ subject_id: subjectId, name: subjectName });
       setSubjectId('');
       setSubjectName('');
     } catch (error) {

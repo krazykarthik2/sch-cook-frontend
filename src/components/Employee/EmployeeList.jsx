@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaEdit, FaPlus, FaStopwatch } from "react-icons/fa";
+import { FaEdit, FaEye, FaPlus, FaStopwatch, FaTrash } from "react-icons/fa";
 import employee from "../../utils/employee";
 
 const EmployeeList = () => {
@@ -27,7 +27,9 @@ const EmployeeList = () => {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>View</th>
             <th>Edit</th>
+            <th>Delete</th>
             <th>Schedule</th>
           </tr>
           {employees.map((employee, ind) => (
@@ -37,9 +39,25 @@ const EmployeeList = () => {
               <td>
                 <Link
                   className="d-center"
+                  to={`/employee/get/${employee.emp_id}`}
+                >
+                  <FaEye size={32} />
+                </Link>
+              </td>{" "}
+              <td>
+                <Link
+                  className="d-center"
                   to={`/employee/edit/${employee.emp_id}`}
                 >
                   <FaEdit size={32} />
+                </Link>
+              </td>{" "}
+              <td>
+                <Link
+                  className="d-center"
+                  to={`/employee/delete/${employee.emp_id}`}
+                >
+                  <FaTrash size={32} />
                 </Link>
               </td>
               <td>

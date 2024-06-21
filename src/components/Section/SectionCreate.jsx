@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import section from '../../utils/section';
 
 const SectionCreate = () => {
-  const { branchId } = useParams();
+  const branchId = useParams()['branch_id'];
   const [name, setName] = useState('');
   const [secId, setSecId] = useState('');
 

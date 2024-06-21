@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { FaEdit, FaEye, FaPlus, FaTable, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import branch from "../../utils/branch";
 import branchcode from "../../utils/branchcode";
-import { FaEdit, FaPlus } from "react-icons/fa";
-import { splitList } from "../../utils/fx";
 function BranchRow({ branch, branchCode }) {
   return (
     <tr key={branch._id}>
@@ -13,8 +11,23 @@ function BranchRow({ branch, branchCode }) {
       <td>{branchCode?.name}</td>
       <td className="text-center">{branch.year}</td>
       <td>
+        <Link className="d-center" to={`/branch/${branch.branch_id}/section/`}>
+          <FaTable size={24} />
+        </Link>
+      </td>
+      <td>
+        <Link className="d-center" to={`/branch/get/${branch.branch_id}`}>
+          <FaEye size={24} />
+        </Link>
+      </td>{" "}
+      <td>
         <Link className="d-center" to={`/branch/edit/${branch.branch_id}`}>
-          <FaEdit size={45} />
+          <FaEdit size={24} />
+        </Link>
+      </td>{" "}
+      <td>
+        <Link className="d-center" to={`/branch/delete/${branch.branch_id}`}>
+          <FaTrash size={24} />
         </Link>
       </td>
     </tr>
@@ -24,6 +37,7 @@ function BranchRow({ branch, branchCode }) {
 const BranchList = () => {
   const [branches, setBranches] = useState([]);
   const [branchCodes, setBranchCodes] = useState([]);
+  
   useEffect(() => {
     const fetchBranches = async () => {
       try {
@@ -50,21 +64,28 @@ const BranchList = () => {
     <div className="h-full w-full p-5">
       <h2>Branches</h2>
       <table className="w-full h-full">
-        <tr>
-          <th>ID</th>
-          <th>code</th>
-          <th>name</th>
-          <th>Year</th>
-          <th>Edit</th>
-        </tr>
-        {branches.map((branch) => (
-          <BranchRow
-            branch={branch}
-            branchCode={branchCodes.find(
-              (e) => e.branch_code == branch.branch_code
-            )}
-          />
-        ))}
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>code</th>
+            <th>name</th>
+            <th>Year</th>
+            <th>Sec</th>
+            <th>View</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {branches.map((branch) => (
+            <BranchRow
+              branch={branch}
+              branchCode={branchCodes.find(
+                (e) => e.branch_code == branch.branch_code
+              )}
+            />
+          ))}
+        </tbody>
       </table>
       <div className="absolute m-5 bottom-0 right-0">
         <Link

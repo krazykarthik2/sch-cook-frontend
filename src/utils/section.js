@@ -2,25 +2,22 @@ import axios from "axios";
 import backend from "./backend.json";
 const URLbase = backend.URLbase;
 async function create(branch_id, { name, sec_id }) {
-  let opt = {};
-  [(name, sec_id)]
-    .filter((e) => e)
-    .forEach((e) => {
-      opt = { e, ...opt };
-    });
-  return await axios.post(URLbase + `/branch/${branch_id}/section/create`, opt);
+  return await axios.post(URLbase + `/branch/${branch_id}/section/create`, {
+    name,
+    sec_id,
+  });
 }
-async function edit(branch_id,sec_id, { name }) {
-  let opt = {};
-  [name]
-    .filter((e) => e)
-    .forEach((e) => {
-      opt = { e, ...opt };
-    });
+
+async function edit(branch_id, sec_id, { name }) {
   return await axios.post(
     URLbase + `/branch/${branch_id}/section/edit/${sec_id}`,
-    opt
+    { name }
   );
 }
-const section = { create, edit };
+async function _delete(branch_id, sec_id) {
+  return await axios.delete(
+    URLbase + `/branch/${branch_id}/section/delete/${sec_id}`
+  );
+}
+const section = { create, edit, _delete };
 export default section;

@@ -1,17 +1,12 @@
 import axios from "axios";
 import backend from "./backend.json";
+import { unique } from "./fx";
 const URLbase = backend.URLbase;
 async function create({ subject_id, name }) {
-
-  return await axios.post(URLbase + `/subject/create`, {name,subject_id});
+  return await axios.post(URLbase + `/subject/create`, { name, subject_id });
 }
 async function getSome(arr) {
-  let request_arr = Array.from(new Set(arr));
-  console.log(request_arr);
-  const opt = {
-    get: request_arr,
-  };
-  return await axios.get(URLbase + `/subject/get`, opt);
+  return await axios.post(URLbase + `/subject/get`, { get: unique(arr) });
 }
 async function getAll(arr) {
   if (arr) {

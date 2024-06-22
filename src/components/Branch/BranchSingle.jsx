@@ -14,7 +14,6 @@ const BranchSingle = () => {
   const fetchBranch = async (e) => {
     try {
       const response = await branch.get(branch_id);
-      console.log(response.data);
       setBranch_(response.data);
     } catch (error) {
       console.error("Error creating section:", error);

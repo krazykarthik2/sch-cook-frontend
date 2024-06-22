@@ -28,6 +28,9 @@ const routes = {
     create: "/branch/:branch_id/section/create",
     edit: "/branch/:branch_id/section/edit/:id",
     delete: "/branch/:branch_id/section/delete/:id",
+    get: "/branch/:branch_id/section/",
+  },
+  timetable: {
     get: "/branch/:branch_id/section/:section_id/timetable/get",
     edit: "/branch/:branch_id/section/:section_id/timetable/edit",
     delete: "/branch/:branch_id/section/:section_id/timetable/delete",

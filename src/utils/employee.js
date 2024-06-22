@@ -1,23 +1,29 @@
 import axios from "axios";
 import backend from "./backend.json";
+import { unique } from "./fx";
 const URLbase = backend.URLbase;
-async function create({ name,emp_id }) {
-  let opt = {name:name,emp_id:emp_id}
+async function create({ name, emp_id }) {
+  let opt = { name: name, emp_id: emp_id };
   return await axios.post(URLbase + `/employee/create`, opt);
 }
-async function getAll(){
+async function getSome(arr) {
+  window.unique=unique
+  return await axios.post(URLbase + `/employee/get`, { get: unique(arr) });
+}
+async function getAll(arr) {
+  if (arr.length) if (arr.length > 0) return await getSome(arr);
   return await axios.get(URLbase + `/employee/get`);
 }
 async function get(id) {
-  return await axios.get(URLbase +`/employee/get/${id}`);
+  return await axios.get(URLbase + `/employee/get/${id}`);
 }
 async function edit(id, { name }) {
-  let opt = {name:name};
+  let opt = { name: name };
   return await axios.post(URLbase + `/employee/edit/${id}`, opt);
 }
-async function schedule_get(id){
-    return await axios.get(URLbase + `/employee/timetable/get/${id}`);
+async function schedule_get(id) {
+  return await axios.get(URLbase + `/employee/timetable/get/${id}`);
 }
-const schedule={get:schedule_get}
-const employee = { create, get,getAll ,edit,schedule};
+const schedule = { get: schedule_get };
+const employee = { create, get, getAll, edit, schedule };
 export default employee;

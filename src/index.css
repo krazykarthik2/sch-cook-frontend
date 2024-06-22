@@ -40,6 +40,10 @@
     padding: theme("spacing.6");
     box-shadow: theme("boxShadow.xl");
   }
+  button:disabled,.btn:disabled{
+    opacity: .7;
+    cursor: not-allowed;
+  }
   button:not(.unbtn),
   .btn:not(.unbtn) {
     background-color: theme("colors.rose.500");

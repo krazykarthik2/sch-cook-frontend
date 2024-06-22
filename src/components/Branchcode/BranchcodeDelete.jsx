@@ -8,7 +8,6 @@ const BranchcodeDelete = () => {
   const [branchCode,setBranchCode] = useState({});
   useEffect(()=>{
       branchcode.get(branch_code).then(result=>{
-          console.log(result)
           setBranchCode(result.data);
       })
   },[branch_code])

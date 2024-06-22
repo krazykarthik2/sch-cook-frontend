@@ -9,10 +9,8 @@ const toTable = (schedule) => {
     { length: schedule?.MON?.length || 0 },
     () => new Array(7)
   );
-  console.log(table);
   for (let day in schedule) {
     for (let period in schedule[day]) {
-      console.log(period, day);
       table[period][day_arr.findIndex((e) => e == day)] = schedule[day][period];
     }
   }

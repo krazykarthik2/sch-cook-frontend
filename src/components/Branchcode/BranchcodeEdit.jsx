@@ -9,7 +9,6 @@ const BranchcodeEdit = () => {
 const navigate = useNavigate()
   useEffect(() => {
     branchcode.get(branch_code).then((result) => {
-      console.log(result);
       setBranchCode(result.data);
       setEditedName(result.data.name);
     });

@@ -16,7 +16,7 @@ const EmpRelationEdit = () => {
     });
 
     useEffect(() => {
-        axios.get(`/relation/get/${id}`)
+        emprelation.get(id)
             .then(response => setRelation(response.data))
             .catch(error => console.error('Error fetching relation:', error));
     }, [id]);

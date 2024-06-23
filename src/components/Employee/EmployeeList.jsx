@@ -24,52 +24,54 @@ const EmployeeList = () => {
       <h1 className="text-2xl">EMPLOYEE.LIST</h1>
       <div className="w-full p-5">
         <table className="w-full ">
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>View</th>
-            <th>Edit</th>
-            <th>Delete</th>
-            <th>Schedule</th>
-          </tr>
-          {employees.map((employee, ind) => (
-            <tr key={ind} className=" font-M">
-              <td>{employee.emp_id}</td>
-              <td>{employee.name}</td>
-              <td>
-                <Link
-                  className="d-center"
-                  to={`/employee/get/${employee.emp_id}`}
-                >
-                  <FaEye size={32} />
-                </Link>
-              </td>{" "}
-              <td>
-                <Link
-                  className="d-center"
-                  to={`/employee/edit/${employee.emp_id}`}
-                >
-                  <FaEdit size={32} />
-                </Link>
-              </td>{" "}
-              <td>
-                <Link
-                  className="d-center"
-                  to={`/employee/delete/${employee.emp_id}`}
-                >
-                  <FaTrash size={32} />
-                </Link>
-              </td>
-              <td>
-                <Link
-                  className="d-center"
-                  to={`/employee/timetable/get/${employee.emp_id}`}
-                >
-                  <FaStopwatch size={32} />
-                </Link>
-              </td>
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>View</th>
+              <th>Edit</th>
+              <th>Delete</th>
+              <th>Schedule</th>
             </tr>
-          ))}
+            {employees.map((employee, ind) => (
+              <tr key={ind} className=" font-M">
+                <td>{employee.emp_id}</td>
+                <td>{employee.name}</td>
+                <td>
+                  <Link
+                    className="d-center"
+                    to={`/employee/get/${employee.emp_id}`}
+                  >
+                    <FaEye size={32} />
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    className="d-center"
+                    to={`/employee/edit/${employee.emp_id}`}
+                  >
+                    <FaEdit size={32} />
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    className="d-center"
+                    to={`/employee/delete/${employee.emp_id}`}
+                  >
+                    <FaTrash size={32} />
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    className="d-center"
+                    to={`/employee/timetable/get/${employee.emp_id}`}
+                  >
+                    <FaStopwatch size={32} />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
       <div className="absolute m-5 bottom-0 right-0">

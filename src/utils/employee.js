@@ -7,11 +7,11 @@ async function create({ name, emp_id }) {
   return await axios.post(URLbase + `/employee/create`, opt);
 }
 async function getSome(arr) {
-  window.unique=unique
+  window.unique = unique;
   return await axios.post(URLbase + `/employee/get`, { get: unique(arr) });
 }
 async function getAll(arr) {
-  if (arr.length) if (arr.length > 0) return await getSome(arr);
+  if (arr) if (arr.length) return await getSome(arr);
   return await axios.get(URLbase + `/employee/get`);
 }
 async function get(id) {

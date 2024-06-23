@@ -18,8 +18,9 @@ function SectionsGet() {
     fetchBranch();
   }, []);
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <h2>Sections of {branch_.branch_id}</h2>
+      {branch_?.sections?.length == 0 && <div className="w-full h-full d-center h1 text-muted">No Sections</div>}
       <div className="flex flex-wrap gap-2">
         {branch_?.sections?.map((e, i) => (
           <SectionCard section={e} branch_id={branch_.branch_id} key={i} />

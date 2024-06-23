@@ -43,6 +43,8 @@ const routes = {
     delete: "/subject/delete/:id",
   },
   relation: {
+    get: "/relation/get",
+    id:"/relation/get/:id",
     create: "/relation/create",
     edit: "/relation/edit/:id",
     delete: "/relation/delete/:id",

@@ -11,6 +11,9 @@
   .text-muted{
     @apply text-gray-700 pointer-events-none
   }
+  select{
+    @apply border-4 rounded-xl p-2
+  }
   table,
   .table {
     border: 1px solid #000;

@@ -19,22 +19,33 @@ const toTable = (schedule) => {
 function Empty() {
   return <div className="h-12 d-center">empty</div>;
 }
-function Cell({ value, subjects, hideSubName }) {
+function Cell({ value, subjects, hide }) {
   return (
-    <div className="flex  gap-2 p-1">
-      <div className="flex flex-col">
+    <div className="flex flex-col gap-2 p-1">
+      <div className="d-center justify-between">
         <div className="d-center">{value?.subject_id}</div>
-        {hideSubName || (
-          <div className="d-center">
-            {subjects.find((e) => e?.subject_id == value?.subject_id)?.name}
-          </div>
+        {hide.sub_name || (
+          <>
+            <div className="sep w-1 h-1 bg-white rounded-full"></div>
+            <div className="d-center">
+              {subjects?.find((e) => e?.subject_id == value?.subject_id)?.name}
+            </div>
+          </>
         )}
       </div>
-      <div className="w-1 bg-white rounded-full"></div>
-      <div className="flex flex-col">
-        <div>{value?.branch_id}</div>
-        <div>{value?.sec_id}</div>
-      </div>
+      {hide.room_id || (
+        <>
+          <div className="h-1 bg-white rounded-full"></div>
+
+          <div className="d-center justify-between">
+            <div>{value?.branch_id}</div>
+
+            <div className="sep w-1 h-1 bg-white rounded-full"></div>
+
+            <div>{value?.sec_id}</div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -44,13 +55,14 @@ const EmployeeSchedule = () => {
   const [subjects, setSubjects] = useState([]);
   const [table, setTable] = useState([[], [], [], [], [], [], []]);
   const [hideSubName, setHideSubName] = useState(false);
+  const [hideRoomId, setHideRoomId] = useState(false);
   const [employee__, setEmployee__] = useState({});
   window.subjects = subjects;
   window.subject = subject;
   const fetchSubjects = async (arr) => {
     try {
       const response = await subject.getAll(arr);
-      setSubjects(response.data);
+      if (response) setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
     }
@@ -90,34 +102,34 @@ const EmployeeSchedule = () => {
   return (
     <div>
       <h2>
-        {" "}
         Schedule of <span className="font-M font-bold">{employee__.name}</span>[
         <span className="font-M font-bold">{id}</span>]
       </h2>
-
       <table className="m-auto">
-        <tr>
-          {day_arr.map((e) => (
-            <th>{e}</th>
-          ))}
-        </tr>
-        {table.map((row) => (
+        <tbody>
           <tr>
-            {row.map((cell) => (
-              <td>
-                {cell ? (
-                  <Cell
-                    value={cell}
-                    subjects={subjects}
-                    hideSubName={hideSubName}
-                  />
-                ) : (
-                  <Empty />
-                )}
-              </td>
+            {day_arr.map((e, i) => (
+              <th key={i}>{e}</th>
             ))}
           </tr>
-        ))}
+          {table.map((row, ind) => (
+            <tr key={ind}>
+              {row.map((cell, ind2) => (
+                <td key={ind2}>
+                  {cell ? (
+                    <Cell
+                      value={cell}
+                      subjects={subjects}
+                      hide={{ sub_name: hideSubName, room_id: hideRoomId }}
+                    />
+                  ) : (
+                    <Empty />
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
       <div className="d-center gap-2">
         <input
@@ -125,10 +137,22 @@ const EmployeeSchedule = () => {
           name="sub_name"
           id="sub_name"
           checked={hideSubName}
-          onInput={(e) => setHideSubName(!e.target.checked)}
+          onChange={(e) => setHideSubName(e.target.checked)}
         />
         <label htmlFor="sub_name" className="h2">
           Hide Subject Name
+        </label>
+      </div>{" "}
+      <div className="d-center gap-2">
+        <input
+          type="checkbox"
+          name="room_id"
+          id="room_id"
+          checked={hideRoomId}
+          onChange={(e) => setHideRoomId(e.target.checked)}
+        />
+        <label htmlFor="room_id" className="h2">
+          Hide Branch_id and Section_id
         </label>
       </div>
     </div>

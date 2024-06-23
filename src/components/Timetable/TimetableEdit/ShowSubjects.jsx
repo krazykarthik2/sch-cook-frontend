@@ -73,7 +73,7 @@ function ShowSub({
         <div className="employee_id">{relation?.emp_id}</div>
         <div className="employee_name">{employee?.name}</div>
       </div>
-      {day && period && (
+      {day!=null && period!=null && (
         <ShowAvailability
           {...{ emp_sch, day, period, setIsAvl, branch_id, section_id }}
         />

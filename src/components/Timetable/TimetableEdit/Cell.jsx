@@ -1,5 +1,6 @@
 import React from "react";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaPen } from "react-icons/fa6";
+const day_array = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 function Empty({ value, passData, day, period, timetable__ }) {
   const [day_sel, period_sel] = passData.selected;
@@ -25,7 +26,7 @@ function Empty({ value, passData, day, period, timetable__ }) {
     </div>
   );
 }
-function Cell({ value, passData, day, period, timetable__ }) {
+function Cell({ value, passData, day, period }) {
   const relation = passData?.relations?.find(
     (e) =>
       e?.branch_id == passData?.branch_id &&
@@ -60,6 +61,10 @@ function Cell({ value, passData, day, period, timetable__ }) {
               <div className="d-center">{subject?.name}</div>
             </>
           )}
+          {passData?.timetable__ &&
+            (passData?.timetable__[day_array[day]][period] == value || (
+              <FaPen size={24} />
+            ))}
         </div>
         {(passData?.hide.emp_id && passData?.hide.emp_name) || (
           <div className="h-1 bg-white rounded-full"></div>

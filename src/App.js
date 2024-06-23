@@ -7,6 +7,7 @@ import "./index.css";
 import "./fonts.css";
 import SubjectList from "./components/Subject/SubjectList";
 import SubjectSingle from "./components/Subject/SubjectSingle";
+import EmpRelationSingle from "./components/EmployeeRelation/EmpRelationSingle";
 const BranchcodeCreate = lazy(() =>
   import("./components/Branchcode/BranchcodeCreate")
 );
@@ -62,6 +63,9 @@ const SubjectCreate = lazy(() => import("./components/Subject/SubjectCreate"));
 const SubjectEdit = lazy(() => import("./components/Subject/SubjectEdit"));
 const SubjectDelete = lazy(() => import("./components/Subject/SubjectDelete"));
 
+const EmpRelationGet = lazy(() =>
+  import("./components/EmployeeRelation/EmpRelationGet")
+);
 const EmpRelationCreate = lazy(() =>
   import("./components/EmployeeRelation/EmpRelationCreate")
 );
@@ -111,7 +115,7 @@ function App() {
             </Route>
 
             <Route path=":branch_id/section">
-              <Route path="" element={<SectionsGet />}/>
+              <Route path="" element={<SectionsGet />} />
               <Route path="create" element={<SectionCreate />} />
               <Route path="edit">
                 <Route path=":section_id" element={<SectionEdit />} />
@@ -142,11 +146,11 @@ function App() {
             </Route>
           </Route>
           {/* Subject Routes */}
-          <Route path="/subject"> 
+          <Route path="/subject">
             <Route path="get">
               <Route path="" element={<SubjectList />} />
               <Route path=":id" element={<SubjectSingle />} />
-              </Route>
+            </Route>
             <Route path="create" element={<SubjectCreate />} />
             <Route path="edit">
               <Route path=":id" element={<SubjectEdit />} />
@@ -157,6 +161,10 @@ function App() {
           </Route>
           {/* Employee Relation Routes */}
           <Route path="/relation">
+            <Route path="get">
+              <Route path="" element={<EmpRelationGet />} />
+              <Route path=":id" element={<EmpRelationSingle />} />
+            </Route>
             <Route path="create" element={<EmpRelationCreate />} />
             <Route path="edit">
               <Route path=":id" element={<EmpRelationEdit />} />

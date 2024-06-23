@@ -42,7 +42,6 @@ const TimetableEdit = () => {
     let isFilled = false;
     let isDiff = false;
     for (let i of days) {
-      console.log(i);
       for (let j in timetable_edited[i]) {
         if (timetable_edited[i][j] != null) {
           isFilled = true;
@@ -52,14 +51,12 @@ const TimetableEdit = () => {
     }
     for (let i of days) {
       for (let j in timetable_edited[i]) {
-        console.log(timetable_edited[i][j], timetable__[i][j]);
         if (timetable_edited[i][j] != timetable__[i][j]) {
           isDiff = true;
           break;
         }
       }
     }
-    console.log(isFilled, isDiff);
     setIsValid(isFilled && isDiff);
   }, [timetable__, timetable_edited]);
 
@@ -112,11 +109,11 @@ const TimetableEdit = () => {
     employees.forEach((__emp) => {
       employee.schedule.get(__emp.emp_id).then((response) => {
         setEmpSch((e) => {
-          if (e.findIndex(n=>n.emp_id == __emp.emp_id) == -1)
+          if (e.findIndex((n) => n.emp_id == __emp.emp_id) == -1)
             return [...e, { emp_id: __emp.emp_id, sch: response.data }];
           else {
             let x = [...e];
-            x.find(n=>n.emp_id==__emp.emp_id).sch = response.data;
+            x.find((n) => n.emp_id == __emp.emp_id).sch = response.data;
             return x;
           }
         });
@@ -151,13 +148,12 @@ const TimetableEdit = () => {
   }
 
   function onCellClick(day, period) {
-    console.log(day, period);
     if (day == active.day && period == active.period)
       setActive({ day: null, period: null });
     else setActive({ day: day, period: period });
   }
   function onSubClick(subject_id) {
-    if (active.day && active.period)
+    if (active.day != null && active.period != null)
       setT_Edited((e) => {
         let x = { ...e };
         x[day_array[active.day]][active.period] = subject_id;
@@ -248,13 +244,16 @@ const TimetableEdit = () => {
         <button className="" onClick={() => save()} disabled={!isValid}>
           Save
         </button>
-        <button
-          className=""
-          onClick={() => save(() => back())}
-          disabled={!isValid}
-        >
-          Save & Exit
-        </button>
+        {isValid && (
+          <button className="" onClick={() => save(() => back())}>
+            Save & Exit
+          </button>
+        )}
+        {!isValid && (
+          <button className="" onClick={() => back()}>
+            Exit
+          </button>
+        )}
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import subject from "../../utils/subject";
 import { unique } from "../../utils/fx";
 import emprelation from "../../utils/emprelation";
 import employee from "../../utils/employee";
+import { FaEdit } from "react-icons/fa";
 function Cell({ value, passData }) {
   const relation = passData?.relations?.find(
     (e) =>
@@ -20,23 +21,34 @@ function Cell({ value, passData }) {
   );
   const subject = passData?.subjects?.find((e) => e?.subject_id == value);
   return (
-    <div className="flex  gap-2 p-1">
-      <div className="flex flex-col">
+    <div className="flex flex-col gap-2 p-1">
+      <div className="d-center justify-between">
         <div className="d-center">{value}</div>
         {passData?.hide.sub_name || (
-          <div className="d-center">{subject?.name}</div>
+          <>
+            <div className="sep w-1 h-1 bg-white rounded-full"></div>
+            <div className="d-center">{subject?.name}</div>
+          </>
         )}
       </div>
       {(passData?.hide.emp_id && passData?.hide.emp_name) || (
-        <div className="w-1 bg-white rounded-full"></div>
+        <div className="h-1 bg-white rounded-full"></div>
       )}
-      <div className="flex flex-col">
+      <div className="d-center justify-between">
         {passData?.hide.emp_id || <div>{relation?.emp_id}</div>}
+        {passData?.hide.emp_id || passData?.hide.emp_name || (
+          <div className="sep w-1 h-1 bg-white rounded-full"></div>
+        )}
         {passData?.hide.emp_name || <div>{employee?.name}</div>}
       </div>
     </div>
   );
 }
+
+function Empty() {
+  return <div className="h-12 d-center select-none">empty</div>;
+}
+
 const dummy = {
   MON: [null, null, null, null, null, null, null, null],
   TUE: [null, null, null, null, null, null, null, null],
@@ -109,7 +121,12 @@ const TimetableGet = () => {
 
   return (
     <div>
-      <h1>Timetable</h1>
+      <div className="d-center justify-between p-5">
+        <h1>Timetable</h1>
+        <Link className="btn" to={"../edit"}>
+          <FaEdit size={25} />
+        </Link>
+      </div>
       {not_exist == null && <>Loading</>}
       {not_exist === true && (
         <div className="flex flex-col">
@@ -124,6 +141,7 @@ const TimetableGet = () => {
       <Table_Data
         schedule={timetable__}
         Cell={Cell}
+        Empty={Empty}
         passData={{
           branch_id: branch_id,
           section_id: section_id,

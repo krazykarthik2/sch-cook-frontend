@@ -12,11 +12,7 @@ const toTable = (schedule) => {
   }
   return table;
 };
-function Empty() {
-  return <div className="h-12 d-center select-none">empty</div>;
-}
-
-const Table_Data = ({ schedule, Cell, passData }) => {
+const Table_Data = ({ schedule, Cell, passData, Empty  }) => {
   const [table, setTable] = useState([]);
   useEffect(() => {
     setTable(toTable(schedule));
@@ -26,16 +22,31 @@ const Table_Data = ({ schedule, Cell, passData }) => {
     <table className="m-auto">
       <tbody>
         <tr>
-          {day_arr.map((e,i) => (
+          <td key="-1" className="font-I">
+            #
+          </td>
+          {day_arr.map((e, i) => (
             <th key={i}>{e}</th>
           ))}
         </tr>
 
-        {table.map((row,i) => (
+        {table.map((row, i) => (
           <tr key={i}>
-            {row.map((cell,ind) => (
+            <td key="-1" className="font-I">
+              {i + 1}
+            </td>
+            {row.map((cell, ind) => (
               <td key={ind}>
-                {cell ? <Cell value={cell} passData={passData} /> : <Empty />}
+                {cell ? (
+                  <Cell period={i} day={ind} value={cell} passData={passData} />
+                ) : (
+                  <Empty
+                    period={i}
+                    day={ind}
+                    value={cell}
+                    passData={passData}
+                  />
+                )}
               </td>
             ))}
           </tr>

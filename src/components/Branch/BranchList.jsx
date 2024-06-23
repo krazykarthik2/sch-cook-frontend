@@ -19,12 +19,12 @@ function BranchRow({ branch, branchCode }) {
         <Link className="d-center" to={`/branch/get/${branch.branch_id}`}>
           <FaEye size={24} />
         </Link>
-      </td>{" "}
+      </td>
       <td>
         <Link className="d-center" to={`/branch/edit/${branch.branch_id}`}>
           <FaEdit size={24} />
         </Link>
-      </td>{" "}
+      </td>
       <td>
         <Link className="d-center" to={`/branch/delete/${branch.branch_id}`}>
           <FaTrash size={24} />
@@ -79,6 +79,7 @@ const BranchList = () => {
         <tbody>
           {branches.map((branch) => (
             <BranchRow
+              key={branch?.branch_id}
               branch={branch}
               branchCode={branchCodes.find(
                 (e) => e.branch_code == branch.branch_code

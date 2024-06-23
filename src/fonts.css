@@ -6,7 +6,7 @@
     font-family: Montaga;
     src: url("./assets/fonts/Montaga-Regular.ttf");
 }
-h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,button,.btn,.font-I,th,.th{
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,button:not(.unbtn),.btn:not(.unbtn),.font-I,th,.th{
     font-family: Integral;
     @apply tracking-wide
 }

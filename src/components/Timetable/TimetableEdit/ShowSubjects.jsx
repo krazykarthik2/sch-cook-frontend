@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaThumbsUp } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const day_array = ["MON", "TUE", "WED", "THU", "FRI", "SAT"];
 function ShowAvailability({
   emp_sch,
@@ -9,7 +10,7 @@ function ShowAvailability({
   branch_id,
   section_id,
 }) {
-  const sch = emp_sch.sch[day_array[day]][period];
+  const sch = emp_sch?.sch[day_array[day]][period];
   useEffect(() => {
     setIsAvl(
       sch == null || (sch.branch_id == branch_id && sch.sec_id == section_id)
@@ -59,29 +60,48 @@ function ShowSub({
   return (
     <button
       className={
-        "subject card unbtn " + (isAvl ? "" : "bg-gray-500 pointer-events-none")
+        "subject card unbtn " +
+        (relation == null
+          ? "bg-red-400"
+          : isAvl
+          ? ""
+          : "bg-gray-500 pointer-events-none")
       }
       onClick={() => {
-        if (isAvl) onClick(sub.subject_id);
+        if (relation != null){ if (isAvl) onClick(sub.subject_id);}
       }}
     >
       <div className="flex items-baseline justify-between">
         <div className="subject_id h2 title">{sub.subject_id}</div>:
         <div className="subject_name">{sub.name}</div>
       </div>
+      {relation == null && (
+        <Link
+          className="btn flex"
+          to={"/relation/create"}
+          state={{ branch_id, sec_id: section_id, subject_id: sub?.subject_id }}
+        >
+          {" "}
+          Assign Teacher
+        </Link>
+      )}
       <div className="employee flex justify-between">
         <div className="employee_id">{relation?.emp_id}</div>
         <div className="employee_name">{employee?.name}</div>
       </div>
-      {day!=null && period!=null && (
-        <ShowAvailability
-          {...{ emp_sch, day, period, setIsAvl, branch_id, section_id }}
-        />
+      {relation != null && (
+        <>
+          {day != null && period != null && (
+            <ShowAvailability
+              {...{ emp_sch, day, period, setIsAvl, branch_id, section_id }}
+            />
+          )}
+        </>
       )}
     </button>
   );
 }
-function Empty({onClick}) {
+function Empty({ onClick }) {
   return (
     <button
       className={"subject card unbtn "}

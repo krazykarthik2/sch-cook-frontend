@@ -76,16 +76,16 @@ const TimetableEdit = () => {
     });
   }, [timetable__]);
 
-  useEffect(() => {
-    if (not_exist == false)
+  useEffect(() => {//getting__all_subjects
+    if (not_exist !=null)
       if (timetable__)
         subject.getAll().then((response) => {
           if (response) setSubjects(response.data);
         });
   }, [timetable__]);
 
-  useEffect(() => {
-    if (not_exist == false)
+  useEffect(() => {//getting_all_emp_relations
+    if (not_exist!=null) 
       if (timetable__)
         emprelation
           .getAll({
@@ -97,7 +97,7 @@ const TimetableEdit = () => {
           });
   }, [timetable__]);
 
-  useEffect(() => {
+  useEffect(() => {//getting_emp_by_relations
     if (relations.length)
       if (relations[0].emp_id)
         employee.getAll(relations.map((e) => e.emp_id)).then((response) => {
@@ -105,7 +105,7 @@ const TimetableEdit = () => {
         });
   }, [relations]);
 
-  useEffect(() => {
+  useEffect(() => {//getting_emp_schedules
     employees.forEach((__emp) => {
       employee.schedule.get(__emp.emp_id).then((response) => {
         setEmpSch((e) => {

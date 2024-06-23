@@ -4,6 +4,7 @@ import employee from "../../utils/employee";
 import subject from "../../utils/subject";
 import emprelation from "../../utils/emprelation";
 import FormSelect from "../utils/FormSelect";
+import { useLocation } from "react-router-dom";
 
 const EmpRelationCreate = () => {
   const [empId, setEmpId] = useState("");
@@ -20,6 +21,17 @@ const EmpRelationCreate = () => {
   const [branches_opt, setBOpt] = useState({});
   const [section_opt, setSecOpt] = useState({});
   const [subjects_opt, setSOpt] = useState({});
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location)
+      if (location.state) {
+        setEmpId(location.state.emp_id);
+        setBranchId(location.state.branch_id);
+        setSecId(location.state.sec_id);
+        setSubjectId(location.state.subject_id);
+      }
+  }, [location]);
 
   useEffect(() => {
     employee.getAll().then((response) => {

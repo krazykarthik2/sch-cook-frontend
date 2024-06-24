@@ -142,7 +142,7 @@ const EmployeeSchedule = () => {
         <label htmlFor="sub_name" className="h2">
           Hide Subject Name
         </label>
-      </div>{" "}
+      </div>
       <div className="d-center gap-2">
         <input
           type="checkbox"

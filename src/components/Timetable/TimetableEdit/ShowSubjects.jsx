@@ -81,7 +81,7 @@ function ShowSub({
           to={"/relation/create"}
           state={{ branch_id, sec_id: section_id, subject_id: sub?.subject_id }}
         >
-          {" "}
+          
           Assign Teacher
         </Link>
       )}

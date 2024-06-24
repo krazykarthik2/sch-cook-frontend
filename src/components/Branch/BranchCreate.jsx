@@ -79,7 +79,7 @@ const BranchCreate = () => {
       <YouMightNeed
         content={
           <Link state={{__continue:"/branch/create"}} to="/branchcode/create" className="btn flex">
-            <span> Create branch code</span> <FaAngleRight size={30} />{" "}
+            <span> Create branch code</span> <FaAngleRight size={30} />
           </Link>
         }
       />

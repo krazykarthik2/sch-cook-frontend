@@ -1,11 +1,11 @@
 // File: src/App.jsx
 
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
 import "./index.css";
 import "./fonts.css";
-import Terminal from "./components/Terminal"
+import Terminal from "./components/Terminal";
 const SubjectList = lazy(() => import("./components/Subject/SubjectList"));
 const SubjectSingle = lazy(() => import("./components/Subject/SubjectSingle"));
 const EmpRelationSingle = lazy(() =>
@@ -83,6 +83,13 @@ const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
 
 function App() {
+  useEffect(() => {
+    document.onfullscreenchange = (e) => {
+      console.log('full screen changed')
+      console.log(window.isFullscreen);
+      console.log(e);
+    };
+  }, []);
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
@@ -182,7 +189,7 @@ function App() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/loader" element={<BoxLoader />} />
           </Routes>
-      <Terminal />
+          <Terminal />
         </Router>
       </Suspense>
     </>

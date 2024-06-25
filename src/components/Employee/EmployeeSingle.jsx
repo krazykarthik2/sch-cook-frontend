@@ -25,7 +25,7 @@ const EmployeeSingle = () => {
           <h1>Name:</h1>
           <h1 className="font-M">{employee__.name}</h1>
         </div>
-        <div className=" flex">
+        <div className=" flex"> 
           <h1>ID:</h1>
           <p>{employee__.emp_id}</p>
         </div>

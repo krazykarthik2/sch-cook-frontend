@@ -5,14 +5,26 @@
   .d-center {
     @apply flex items-center justify-center;
   }
-  input[type="checkbox"]{
+  input[type="checkbox"] {
     @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600;
   }
-  .text-muted{
-    @apply text-gray-700 pointer-events-none
+  .text-muted {
+    @apply text-gray-700 pointer-events-none;
   }
-  select{
-    @apply border-4 rounded-xl p-2
+  select {
+    @apply border-4 rounded-xl p-2;
+  }
+  .bg-transparent-glass-sm {
+    @apply bg-transparent backdrop-blur-sm;
+  }
+  .bg-transparent-glass-md {
+    @apply bg-transparent backdrop-blur-md;
+  }
+  .bg-frosted-glass-sm {
+    @apply bg-white/20 backdrop-blur-sm;
+  }
+  .bg-frosted-glass-md {
+    @apply bg-white/20 backdrop-blur-md;
   }
   table,
   .table {
@@ -43,8 +55,9 @@
     padding: theme("spacing.6");
     box-shadow: theme("boxShadow.xl");
   }
-  button:disabled,.btn:disabled{
-    opacity: .7;
+  button:disabled,
+  .btn:disabled {
+    opacity: 0.7;
     cursor: not-allowed;
   }
   button:not(.unbtn),
@@ -55,7 +68,7 @@
     padding: theme("spacing.2") theme("spacing.5");
     box-shadow: theme("boxShadow.xl");
   }
-  
+
   .disabled {
     pointer-events: none;
     opacity: 0.6;

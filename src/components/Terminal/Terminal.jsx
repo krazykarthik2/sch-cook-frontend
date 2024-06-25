@@ -182,7 +182,7 @@ function Terminal() {
           .map((e) => e.split("/")[0])
           .slice(1)
           .map((e) => ":" + e);
-        let values_ = command.split(" ").slice(1);
+        let values_ = command.split(" ").slice(1).filter(e=>e!='');
         console.log(var_, values_);
         let nav_ = cmd.nav;
         for (let i in var_) {

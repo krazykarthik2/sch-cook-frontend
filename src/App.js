@@ -1,11 +1,13 @@
 // File: src/App.jsx
 
 import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import BoxLoader from "./components/utils/Loader/BoxLoader";
-import "./index.css";
-import "./fonts.css";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { ProtectAuth } from "./ProtectAuth";
 import Terminal from "./components/Terminal";
+import E404 from "./components/static/E404";
+import BoxLoader from "./components/utils/Loader/BoxLoader";
+import "./fonts.css";
+import "./index.css";
 const SubjectList = lazy(() => import("./components/Subject/SubjectList"));
 const SubjectSingle = lazy(() => import("./components/Subject/SubjectSingle"));
 const EmpRelationSingle = lazy(() =>
@@ -82,113 +84,133 @@ const EmpRelationDelete = lazy(() =>
 const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
 
+const Login = lazy(()=>import( "./components/Auth/Login"));
+const Signup = lazy(()=>import( "./components/Auth/SignUp"));
+
 function App() {
   useEffect(() => {
     document.onfullscreenchange = (e) => {
-      console.log('full screen changed')
+      console.log("full screen changed");
       console.log(window.isFullscreen);
       console.log(e);
     };
   }, []);
+  const auth = {
+    uname: "",
+    jwt: "",
+    isLoggedIn: () => false,
+  };
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
         <Router>
           <Routes>
-            {/* Employee Routes */}
-            <Route path="/employee">
-              <Route path="create" element={<EmployeeCreate />} />
-              <Route path="edit">
-                <Route path=":id" element={<EmployeeEdit />} />
-              </Route>
-              <Route path="delete">
-                <Route path=":id" element={<EmployeeDelete />} />
-              </Route>
-              <Route path="get">
-                <Route path="" element={<EmployeeList />} />
-                <Route path=":id" element={<EmployeeSingle />} />
-              </Route>
-              <Route path="timetable/get/:id" element={<EmployeeSchedule />} />
-            </Route>
-
-            {/* Branch Routes */}
-            <Route path="branch">
-              <Route path="create" element={<BranchCreate />} />
-              <Route path="edit">
-                <Route path=":id" element={<BranchEdit />} />
-              </Route>
-              <Route path="delete">
-                <Route path=":id" element={<BranchDelete />} />
-              </Route>
-              <Route path="get">
-                <Route path="" element={<BranchList />} />
-                <Route path=":id" element={<BranchSingle />} />
-              </Route>
-
-              <Route path=":branch_id/section">
-                <Route path="" element={<SectionsGet />} />
-                <Route path="create" element={<SectionCreate />} />
+            <Route path="" element={<ProtectAuth auth={auth} />}>
+              {/* Employee Routes */}
+              <Route path="employee">
+                <Route path="create" element={<EmployeeCreate />} />
                 <Route path="edit">
-                  <Route path=":section_id" element={<SectionEdit />} />
+                  <Route path=":id" element={<EmployeeEdit />} />
                 </Route>
                 <Route path="delete">
-                  <Route path=":section_id" element={<SectionDelete />} />
+                  <Route path=":id" element={<EmployeeDelete />} />
                 </Route>
-                <Route path=":section_id">
-                  <Route path="timetable">
-                    <Route path="get" element={<TimetableGet />} />
-                    <Route path="edit" element={<TimetableEdit />} />
-                    <Route path="delete" element={<TimetableDelete />} />
+                <Route path="get">
+                  <Route path="" element={<EmployeeList />} />
+                  <Route path=":id" element={<EmployeeSingle />} />
+                </Route>
+                <Route
+                  path="timetable/get/:id"
+                  element={<EmployeeSchedule />}
+                />
+              </Route>
+
+              {/* Branch Routes */}
+              <Route path="branch">
+                <Route path="create" element={<BranchCreate />} />
+                <Route path="edit">
+                  <Route path=":id" element={<BranchEdit />} />
+                </Route>
+                <Route path="delete">
+                  <Route path=":id" element={<BranchDelete />} />
+                </Route>
+                <Route path="get">
+                  <Route path="" element={<BranchList />} />
+                  <Route path=":id" element={<BranchSingle />} />
+                </Route>
+
+                <Route path=":branch_id/section">
+                  <Route path="" element={<SectionsGet />} />
+                  <Route path="create" element={<SectionCreate />} />
+                  <Route path="edit">
+                    <Route path=":section_id" element={<SectionEdit />} />
+                  </Route>
+                  <Route path="delete">
+                    <Route path=":section_id" element={<SectionDelete />} />
+                  </Route>
+                  <Route path=":section_id">
+                    <Route path="timetable">
+                      <Route path="get" element={<TimetableGet />} />
+                      <Route path="edit" element={<TimetableEdit />} />
+                      <Route path="delete" element={<TimetableDelete />} />
+                    </Route>
                   </Route>
                 </Route>
               </Route>
-            </Route>
-            <Route path="branchcode">
-              <Route path="create" element={<BranchcodeCreate />} />
-              <Route path="edit">
-                <Route path=":branch_code" element={<BranchcodeEdit />} />
+              <Route path="branchcode">
+                <Route path="create" element={<BranchcodeCreate />} />
+                <Route path="edit">
+                  <Route path=":branch_code" element={<BranchcodeEdit />} />
+                </Route>
+                <Route path="delete">
+                  <Route path=":branch_code" element={<BranchcodeDelete />} />
+                </Route>
+                <Route path="get">
+                  <Route path="" element={<BranchcodeList />} />
+                  <Route path=":branch_code" element={<BranchcodeSingle />} />
+                </Route>
               </Route>
-              <Route path="delete">
-                <Route path=":branch_code" element={<BranchcodeDelete />} />
+              {/* Subject Routes */}
+              <Route path="subject">
+                <Route path="get">
+                  <Route path="" element={<SubjectList />} />
+                  <Route path=":id" element={<SubjectSingle />} />
+                </Route>
+                <Route path="create" element={<SubjectCreate />} />
+                <Route path="edit">
+                  <Route path=":id" element={<SubjectEdit />} />
+                </Route>
+                <Route path="delete">
+                  <Route path=":id" element={<SubjectDelete />} />
+                </Route>
               </Route>
-              <Route path="get">
-                <Route path="" element={<BranchcodeList />} />
-                <Route path=":branch_code" element={<BranchcodeSingle />} />
+              {/* Employee Relation Routes */}
+              <Route path="relation">
+                <Route path="get">
+                  <Route path="" element={<EmpRelationGet />} />
+                  <Route path=":id" element={<EmpRelationSingle />} />
+                </Route>
+                <Route path="create" element={<EmpRelationCreate />} />
+                <Route path="edit">
+                  <Route path=":id" element={<EmpRelationEdit />} />
+                </Route>
+                <Route path="delete">
+                  <Route path=":id" element={<EmpRelationDelete />} />
+                </Route>
               </Route>
-            </Route>
-            {/* Subject Routes */}
-            <Route path="/subject">
-              <Route path="get">
-                <Route path="" element={<SubjectList />} />
-                <Route path=":id" element={<SubjectSingle />} />
-              </Route>
-              <Route path="create" element={<SubjectCreate />} />
-              <Route path="edit">
-                <Route path=":id" element={<SubjectEdit />} />
-              </Route>
-              <Route path="delete">
-                <Route path=":id" element={<SubjectDelete />} />
-              </Route>
-            </Route>
-            {/* Employee Relation Routes */}
-            <Route path="/relation">
-              <Route path="get">
-                <Route path="" element={<EmpRelationGet />} />
-                <Route path=":id" element={<EmpRelationSingle />} />
-              </Route>
-              <Route path="create" element={<EmpRelationCreate />} />
-              <Route path="edit">
-                <Route path=":id" element={<EmpRelationEdit />} />
-              </Route>
-              <Route path="delete">
-                <Route path=":id" element={<EmpRelationDelete />} />
-              </Route>
+              <Route path="/" element={<Home />} />
+              {/* Exception for home route */}
             </Route>
             {/* Default Route */}
-            <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/loader" element={<BoxLoader />} />
+            <Route path="/auth">
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            </Route>
+            <Route path="*" element={<E404 />} />
           </Routes>
+
           <Terminal />
         </Router>
       </Suspense>

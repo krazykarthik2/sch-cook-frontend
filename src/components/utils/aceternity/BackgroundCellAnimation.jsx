@@ -15,13 +15,22 @@ const BackgroundCellCore = () => {
 
   const ref = useRef(null);
   const [clickedCell, setClickedCell] = useState(null);
-
+  const [hoveredCell, setHoveredCell] = useState(null);
   const handleMouseMove = (event) => {
     const rect = ref.current && ref.current.getBoundingClientRect();
+    const x_ = event.clientX - rect.left;
+    const y_ = event.clientY - rect.top;
     setMousePosition({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
+      x: x_,
+      y: y_,
     });
+    const [x, y] = [
+      Math.ceil(x_ / (48 + 1.05)) - 1,
+      // Math.ceil(mousePosition.x / (firstBlock.clientWidth + 1.05))-1,
+      Math.ceil(y_ / (48 + 1.05)) - 1,
+      // Math.ceil(mousePosition.y / (firstBlock.clientHeight + 1.05))-1,
+    ];
+    setHoveredCell([x, y]);
   };
   const handleMouseClick = (event) => {
     // const firstBlock = document.querySelector(".the_block");
@@ -31,10 +40,6 @@ const BackgroundCellCore = () => {
       Math.ceil(mousePosition.y / (48 + 1.05)) - 1,
       // Math.ceil(mousePosition.y / (firstBlock.clientHeight + 1.05))-1,
     ];
-    console.log(
-      x, //1 compensating for border-1
-      y
-    ); //1 compensating for border-1
     setClickedCell([x, y]);
   };
 
@@ -74,22 +79,29 @@ const BackgroundCellCore = () => {
             WebkitMaskRepeat: "no-repeat",
           }}
         >
-          <Pattern
-            cellClassName="border-teal-500 relative z-[100]"
-            clickedCell={clickedCell}
-          />
+          <Pattern cellClassName="border-teal-500 relative z-[100]" />
         </div>
         <Pattern
           className="opacity-30 -z-[1]"
           cellClassName="border-neutral-500"
+          hoveredCell={hoveredCell}
           clickedCell={clickedCell}
+          setClickedCell={setClickedCell}
+          setHoveredCell={setHoveredCell}
         />
       </div>
     </div>
   );
 };
 
-const Pattern = ({ className, cellClassName, clickedCell }) => {
+const Pattern = ({
+  className,
+  cellClassName,
+  clickedCell,
+  setClickedCell,
+  setHoveredCell,
+  hoveredCell,
+}) => {
   const x = new Array(
     Math.ceil(document.body.getBoundingClientRect().width / 48)
   ).fill(0);
@@ -110,6 +122,9 @@ const Pattern = ({ className, cellClassName, clickedCell }) => {
               key={colIdx}
               {...{
                 clickedCell,
+                setClickedCell  ,
+                hoveredCell,
+                setHoveredCell,
                 rowIdx,
                 colIdx,
                 cellClassName,
@@ -123,11 +138,23 @@ const Pattern = ({ className, cellClassName, clickedCell }) => {
 };
 export default BackgroundCellAnimation;
 window._ = [];
-function Cell({ clickedCell, rowIdx, colIdx, cellClassName }) {
+function Cell({
+  clickedCell,
+  setHoveredCell,
+  setClickedCell,
+  hoveredCell,
+  rowIdx,
+  colIdx,
+  cellClassName,
+}) {
   const controls = useAnimation();
-
+  const [previouslyHovered, setPreviouslyHovered] = useState(false);
+  const handleTimeout = () => {
+    setClickedCell(null);
+  };
   useEffect(() => {
     if (clickedCell) {
+      controls.stop();
       const distance = Math.sqrt(
         Math.pow(clickedCell[0] - rowIdx, 2) +
           Math.pow(clickedCell[1] - colIdx, 2)
@@ -138,13 +165,26 @@ function Cell({ clickedCell, rowIdx, colIdx, cellClassName }) {
           duration: distance * 0.2,
         },
       });
+      if (distance == 0) {
+        setHoveredCell(null);
+        let x = setTimeout(handleTimeout, 300);
+        return () => {
+          clearTimeout(x);
+        };
+      }
     }
   }, [clickedCell]);
 
   return (
     <div
       className={cn(
-        "bg-transparent the_block border-l border-b",
+        hoveredCell &&
+          hoveredCell[0] == rowIdx &&
+          hoveredCell[1] == colIdx &&
+          !(clickedCell && clickedCell[0] == rowIdx && clickedCell[1] == colIdx)
+          ? "bg-[rgba(100,211,211,0.86)] !duration-0"
+          : "bg-transparent",
+        " the_block border-l border-b transition duration-500",
         cellClassName
       )}
     >

@@ -28,6 +28,10 @@ const Home = () => {
           <div className="logo">
             <h1 className="text-2xl">SCH-COOK</h1>
           </div>
+          <div className="d-center gap-3 h2">
+            <Link to="/auth/login">Login</Link>
+            <Link to="/auth/signup">Signup</Link>
+          </div>
         </header>
 
         {/* Hero Section */}
@@ -60,7 +64,10 @@ const Home = () => {
               <div className="pointer-events-none md:!pointer-events-auto">
                 <PinContainer
                   children={[
-                    <div className="hero_img-cont  flex w-52 h-52 overflow-hidden pointer-events-none">
+                    <div
+                      key={1}
+                      className="hero_img-cont  flex w-52 h-52 overflow-hidden pointer-events-none"
+                    >
                       <img src={hero_img} alt="clock" className="scale-125" />
                     </div>,
                   ]}

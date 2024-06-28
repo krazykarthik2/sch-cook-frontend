@@ -1,6 +1,6 @@
 // File: src/App.jsx
 
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ProtectAuth } from "./ProtectAuth";
 import Terminal from "./components/Terminal";
@@ -8,6 +8,9 @@ import E404 from "./components/static/E404";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
 import "./fonts.css";
 import "./index.css";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import auth from "./utils/auth";
 const SubjectList = lazy(() => import("./components/Subject/SubjectList"));
 const SubjectSingle = lazy(() => import("./components/Subject/SubjectSingle"));
 const EmpRelationSingle = lazy(() =>
@@ -83,9 +86,10 @@ const EmpRelationDelete = lazy(() =>
 
 const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
+const Welcome = lazy(() => import("./components/static/Welcome"));
 
-const Login = lazy(()=>import( "./components/Auth/Login"));
-const Signup = lazy(()=>import( "./components/Auth/SignUp"));
+const Login = lazy(() => import("./components/Auth/Login"));
+const Signup = lazy(() => import("./components/Auth/SignUp"));
 
 function App() {
   useEffect(() => {
@@ -95,17 +99,47 @@ function App() {
       console.log(e);
     };
   }, []);
-  const auth = {
-    uname: "",
-    jwt: "",
-    isLoggedIn: () => false,
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [username, setUsername] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    const jwtCookie = cookies.jwt;
+    window.cookies = cookies;
+    if (jwtCookie) {
+      auth
+        .useJWT(jwtCookie)
+        .then((response) => {
+          setUsername(response.data.user.username);
+          setLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user:", error);
+          // Optional: Handle invalid or expired JWT token
+          removeCookie("jwt");
+        });
+    }
+  }, [cookies.jwt, removeCookie]);
+
+  const setLoginCookie = (jwtToken) => {
+    setCookie("jwt", jwtToken, { path: "/" });
+  };
+  function handleLogin({ token, user }) {
+    setLoginCookie(token);
+    setUsername(user.username);
+  }
+
+  const handleLogout = () => {
+    removeCookie("jwt");
+    setLoggedIn(false);
+    setUsername("");
   };
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
         <Router>
           <Routes>
-            <Route path="" element={<ProtectAuth auth={auth} />}>
+            <Route path="" element={<ProtectAuth loggedIn={loggedIn} />}>
+              <Route path="/welcome" element={<Welcome username={username} />} />
               {/* Employee Routes */}
               <Route path="employee">
                 <Route path="create" element={<EmployeeCreate />} />
@@ -205,8 +239,13 @@ function App() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/loader" element={<BoxLoader />} />
             <Route path="/auth">
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
+              <Route
+                path="login"
+                element={
+                  <Login handleLogin={handleLogin} loggedIn={loggedIn} />
+                }
+              />
+              <Route path="signup" element={<Signup />} />
             </Route>
             <Route path="*" element={<E404 />} />
           </Routes>

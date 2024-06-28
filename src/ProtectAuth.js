@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import AuthWall from "./components/static/AuthWall"
-export function ProtectAuth({auth}) {
+export function ProtectAuth({loggedIn}) {
   
-  return <>{auth.isLoggedIn()||window.location.pathname=="/"?<Outlet />:<AuthWall/>}</>;
+  return <>{loggedIn||window.location.pathname=="/"?<Outlet />:<AuthWall/>}</>;
 }

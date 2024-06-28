@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaArrowRight, FaDollarSign, FaTerminal } from "react-icons/fa";
 import RecommendFirst from "./RecommendFirst";
 import RecommendSecond from "./RecommendSecond";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Exact from "./Exact";
 
 const stop_Def_ctrl_keys = [
@@ -47,9 +47,43 @@ function Terminal() {
   const navigate = useNavigate();
 
   window.ref = ter_ref;
-
+  const [searchParams, setSearchParams] = useSearchParams();
   ////////////////////////////////////////////////////////////////////////////////////////
+  
+  
 
+  useEffect(() => {
+    const terminalParam = searchParams.get("terminal");
+    if (isActive && terminalParam !== "true") {
+      // Use a callback to avoid unnecessary updates
+      setSearchParams(prevParams => {
+        const newParams = new URLSearchParams(prevParams);
+        newParams.set("terminal", "true");
+        return newParams.toString() !== prevParams.toString() ? newParams : prevParams;
+      });
+    } else if (!isActive && terminalParam === "true") {
+      setSearchParams(prevParams => {
+        const newParams = new URLSearchParams(prevParams);
+        newParams.delete("terminal");
+        return newParams.toString() !== prevParams.toString() ? newParams : prevParams;
+      });
+    }
+  }, [isActive ]);
+
+  useEffect(() => {
+    const terminalParam = searchParams.get("terminal");
+    if (terminalParam === "true" && !isActive) {
+      setIsActive(true);
+    } else if (terminalParam !== "true" && isActive) {
+      setIsActive(false);
+    }
+  }, [searchParams]);
+
+
+
+
+
+  //////////////////////
   useEffect(() => {
     //manage the shortcuts
     const fx = (e) => {
@@ -87,7 +121,7 @@ function Terminal() {
     };
   }, [isActive, bestSugg_]);
   ////////////////////////////////////////////////////////////////////////////////////////
-
+  ///////////////////////////////
   useEffect(() => {
     //manage recommend and isValid,etc.
     let [bef_dot, aft_dot] = command.split(" ")[0].split(".");
@@ -98,9 +132,7 @@ function Terminal() {
     } else setRecom({});
     setIsValid(links[bef_dot] != null && links[bef_dot][aft_dot] != null);
 
-    if(links[bef_dot])
-      if(links[bef_dot][aft_dot])
-        setBestSugg_("")
+    if (links[bef_dot]) if (links[bef_dot][aft_dot]) setBestSugg_("");
   }, [command]);
 
   ///links
@@ -182,7 +214,10 @@ function Terminal() {
           .map((e) => e.split("/")[0])
           .slice(1)
           .map((e) => ":" + e);
-        let values_ = command.split(" ").slice(1).filter(e=>e!='');
+        let values_ = command
+          .split(" ")
+          .slice(1)
+          .filter((e) => e != "");
         console.log(var_, values_);
         let nav_ = cmd.nav;
         for (let i in var_) {

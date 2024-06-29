@@ -1,5 +1,5 @@
 import axios from "axios";
-import backend from "./backend.json";
+import backend from "./backend.js";
 const URLbase = backend.URLbase;
 async function create({ name, branch_code }) {
   let opt = {

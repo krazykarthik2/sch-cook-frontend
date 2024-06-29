@@ -1,5 +1,5 @@
 import axios from "axios";
-import backend from "./backend.json";
+import backend from "./backend.js";
 
 window.def = axios.defaults;
 window.axios = axios

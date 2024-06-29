@@ -1,5 +1,5 @@
 import axios from "axios";
-import backend from "./backend.json";
+import backend from "./backend.js";
 const URLbase = backend.URLbase;
 async function create(branch_id, { name, sec_id }) {
   return await axios.post(URLbase + `/branch/${branch_id}/section/create`, {

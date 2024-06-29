@@ -1,5 +1,5 @@
 import axios from "axios";
-import backend from "./backend.json";
+import backend from "./backend.js";
 import branch from "./branch";
 const URLbase = backend.URLbase;
 async function create(branch_id, section_id, timetable) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import backend from "./backend.json";
+import backend from "./backend.js";
 import { unique } from "./fx";
 const URLbase = backend.URLbase;
 async function create({ emp_id, branch_id, sec_id, subject_id }) {

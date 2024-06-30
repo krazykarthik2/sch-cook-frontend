@@ -19,6 +19,7 @@ import company from "./company.json";
 import { PinContainer } from "../utils/aceternity/3dpin/PinContainer";
 import { FaEnvelope, FaLink, FaRegCopyright } from "react-icons/fa6";
 import BackgroundCellAnimation from "../utils/aceternity/BackgroundCellAnimation";
+import brand_identity_light from "../../assets/img/brand_identity_light.png"
 const Home = () => {
   return (
     <div className="w-full h-full d-center">
@@ -26,7 +27,7 @@ const Home = () => {
         {/* Header */}
         <header className="flex z-10 fixed w-full justify-between items-center p-5 bg-transparent-glass-md text-white">
           <div className="logo">
-            <h1 className="text-2xl">SCH-COOK</h1>
+            <h1 className="text-2xl">asw-1ni</h1>
           </div>
           <div className="d-center gap-3 h2">
             <Link to="/auth/login">Login</Link>
@@ -112,28 +113,36 @@ const Home = () => {
         </section>
 
         {/* Footer */}
-        <footer className="bg-white text-dark  p-5 text-center">
-          <div className="top_row d-center justify-between">
-            <div className="left d-center h-full">
+        <footer className="bg-white text-dark text-center md:p-5 p-2">
+          <div className="top_row d-center justify-between  flex-wrap gap-4 gap-y-5">
+            <div className="left">
+              <img src={brand_identity_light} width={200} height={200}/>
+            </div>
+            <div className="right flex-grow flex justify-between flex-wrap gap-y-5">
+            <div className="links d-center h-full">
               <div className="links font-I flex h-full flex-col items-start">
-                <Link to="/privacy" className="mr-4">
+                <Link to="/privacy" className="whitespace-nowrap">
                   Privacy Policy
                 </Link>
-                <Link to="/terms" className="mr-4">
+                <Link to="/terms" className="whitespace-nowrap">
                   Terms of Service
                 </Link>
-                <Link to="/support">Support</Link>
+                <Link to="/support" className="whitespace-nowrap">Support</Link>
               </div>
             </div>
 
-            <div className="right d-center flex-col h-full">
+            <div className="contact d-center flex-col h-full flex-grow">
               <div className="contact-info flex items-end flex-col gap-2">
                 <Link
                   className="d-center gap-2"
                   to={"mailto://" + company.email}
                 >
                   <FaEnvelope size={20} />
-                  <span className="font-code">{company.email}</span>
+                  <span className="font-code flex md:!flex-row flex-col text-right">
+                    <div>{company.email.split("@")[0]}@</div>
+                    
+                    <div>{company.email.split("@")[1]}</div>
+                  </span>
                 </Link>
                 <div className="d-center gap-3">
                   <Link to={company.socials.linkedIn}>
@@ -145,9 +154,10 @@ const Home = () => {
                 </div>
               </div>
             </div>
+            </div>
           </div>
           <div className="bottom_row">
-            <div className="copy-right-details d-center gap-2">
+            <div className="copy-right-details d-center gap-2 flex-wrap">
               <FaRegCopyright size={21} />
               <span>realKrazy.2022</span>
             </div>

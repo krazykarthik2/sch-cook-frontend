@@ -108,7 +108,7 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
                   }}
                   accessKey="i"
                 >
-                  {isPassVisible ? (
+                  {!isPassVisible ? (
                     <FaEye size={25} />
                   ) : (
                     <FaEyeSlash size={25} />

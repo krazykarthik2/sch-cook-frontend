@@ -4,7 +4,6 @@ import RecommendFirst from "./RecommendFirst";
 import RecommendSecond from "./RecommendSecond";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Exact from "./Exact";
-
 const stop_Def_ctrl_keys = [
   "q",
   "e",
@@ -32,7 +31,7 @@ function considerShortcut(e) {
   e.stopPropagation();
   return false;
 }
-function Terminal() {
+function Terminal({loggedIn,userRole}) {
   const [isActive, setIsActive] = useState(false);
 
   const [command, setCommand] = useState("");
@@ -49,26 +48,28 @@ function Terminal() {
   window.ref = ter_ref;
   const [searchParams, setSearchParams] = useSearchParams();
   ////////////////////////////////////////////////////////////////////////////////////////
-  
-  
 
   useEffect(() => {
     const terminalParam = searchParams.get("terminal");
     if (isActive && terminalParam !== "true") {
       // Use a callback to avoid unnecessary updates
-      setSearchParams(prevParams => {
+      setSearchParams((prevParams) => {
         const newParams = new URLSearchParams(prevParams);
         newParams.set("terminal", "true");
-        return newParams.toString() !== prevParams.toString() ? newParams : prevParams;
+        return newParams.toString() !== prevParams.toString()
+          ? newParams
+          : prevParams;
       });
     } else if (!isActive && terminalParam === "true") {
-      setSearchParams(prevParams => {
+      setSearchParams((prevParams) => {
         const newParams = new URLSearchParams(prevParams);
         newParams.delete("terminal");
-        return newParams.toString() !== prevParams.toString() ? newParams : prevParams;
+        return newParams.toString() !== prevParams.toString()
+          ? newParams
+          : prevParams;
       });
     }
-  }, [isActive ]);
+  }, [isActive]);
 
   useEffect(() => {
     const terminalParam = searchParams.get("terminal");
@@ -78,10 +79,6 @@ function Terminal() {
       setIsActive(false);
     }
   }, [searchParams]);
-
-
-
-
 
   //////////////////////
   useEffect(() => {
@@ -137,7 +134,44 @@ function Terminal() {
 
   ///links
 
-  const links = {
+
+  const ViewerLinks = {
+    emp: {
+      get: { nav: "/employee/get" },
+      id: { nav: "/employee/get/:id" },
+      schedule: { nav: "/employee/timetable/get/:id" },
+    },
+    branch: {
+      get: { nav: "/branch/get" },
+      id: { nav: "/branch/get/:id" },
+    },
+    bcode: {
+      get: { nav: "/branchcode/get" },
+      id: { nav: "/branchcode/get/:branch_code" },
+    },
+    sec: {
+      get: { nav: "/branch/:branch_id/section/" },
+    },
+    timetable: {
+      get: { nav: "/branch/:branch_id/section/:section_id/timetable/get" },
+    },
+    sub: {
+      get: { nav: "/subject/get" },
+      id: { nav: "/subject/get/:id" },
+    },
+    rel: {
+      get: { nav: "/relation/get" },
+      id: { nav: "/relation/get/:id" },
+    },
+  
+    this: {
+      home: { nav: "/" },
+      menu: { nav: "/menu" },
+      loader: { nav: "/loader" },
+      exit: { fx: () => setIsActive(false) },
+    },
+  };
+  const AdminLinks = {
     emp: {
       create: { nav: "/employee/create" },
       edit: { nav: "/employee/edit/:id" },
@@ -187,7 +221,10 @@ function Terminal() {
       edit: { nav: "/relation/edit/:id" },
       delete: { nav: "/relation/delete/:id" },
     },
-
+    org: {
+      create: { nav: "/gov/org/create" },
+    },
+  
     this: {
       home: { nav: "/" },
       menu: { nav: "/menu" },
@@ -195,6 +232,26 @@ function Terminal() {
       exit: { fx: () => setIsActive(false) },
     },
   };
+  
+  const GovLinks={
+  
+    org: {
+      create: { nav: "/gov/org/create" },
+    },
+  
+    this: {
+      home: { nav: "/" },
+      menu: { nav: "/menu" },
+      loader: { nav: "/loader" },
+      exit: { fx: () => setIsActive(false) },
+    },
+  };
+  const directory={
+    viewer:ViewerLinks,
+    admin:AdminLinks,
+    governer:GovLinks,
+  }
+  const links = loggedIn?directory[userRole]:{};
   ////////
 
   function acceptSuggestion() {
@@ -208,6 +265,7 @@ function Terminal() {
   function exec() {
     const cmd = links[cmdbeforedot][cmdafterdot];
     if (cmd.nav) {
+      setCommand("");
       if (cmd.nav.includes(":")) {
         let var_ = cmd.nav
           .split(":")

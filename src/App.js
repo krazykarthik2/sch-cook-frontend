@@ -2,7 +2,7 @@
 
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { ProtectAuth } from "./ProtectAuth";
+import { ProtectAuth, ProtectAuthRole } from "./ProtectAuth";
 import Terminal from "./components/Terminal";
 import E404 from "./components/static/E404";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
@@ -83,6 +83,7 @@ const EmpRelationEdit = lazy(() =>
 const EmpRelationDelete = lazy(() =>
   import("./components/EmployeeRelation/EmpRelationDelete")
 );
+const OrgCreate =  lazy(()=>import("./components/Org/OrgCreate")); 
 
 const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
@@ -101,6 +102,7 @@ function App() {
   }, []);
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [username, setUsername] = useState("");
+  const [userRole,setUserRole] = useState("")
   const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
     const jwtCookie = cookies.jwt;
@@ -110,6 +112,7 @@ function App() {
         .useJWT(jwtCookie)
         .then((response) => {
           setUsername(response.data.user.username);
+          setUserRole(response.data.user.role)
           setLoggedIn(true);
         })
         .catch((error) => {
@@ -125,20 +128,27 @@ function App() {
   };
   function handleLogin({ token, user }) {
     setLoginCookie(token);
-    setUsername(user.username);
+          setUserRole(user.role)
+          setUsername(user.username);
   }
 
   const handleLogout = () => {
     removeCookie("jwt");
     setLoggedIn(false);
     setUsername("");
-  };
+          setUserRole("")
+        };
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
         <Router>
           <Routes>
             <Route path="" element={<ProtectAuth loggedIn={loggedIn} />}>
+            <Route path="gov" element={<ProtectAuthRole role={userRole} permit={["governer"]}/>}>
+              <Route path="org" >
+                <Route path="create" element={<OrgCreate />}/>
+              </Route>
+            </Route>
               <Route path="/welcome" element={<Welcome username={username} />} />
               {/* Employee Routes */}
               <Route path="employee">
@@ -232,7 +242,7 @@ function App() {
                   <Route path=":id" element={<EmpRelationDelete />} />
                 </Route>
               </Route>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home loggedIn={loggedIn} handleLogout={handleLogout}/>} />
               {/* Exception for home route */}
             </Route>
             {/* Default Route */}
@@ -250,7 +260,7 @@ function App() {
             <Route path="*" element={<E404 />} />
           </Routes>
 
-          <Terminal />
+          <Terminal loggedIn={loggedIn} userRole={userRole}/>
         </Router>
       </Suspense>
     </>

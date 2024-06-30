@@ -19,8 +19,8 @@ import company from "./company.json";
 import { PinContainer } from "../utils/aceternity/3dpin/PinContainer";
 import { FaEnvelope, FaLink, FaRegCopyright } from "react-icons/fa6";
 import BackgroundCellAnimation from "../utils/aceternity/BackgroundCellAnimation";
-import brand_identity_light from "../../assets/img/brand_identity_light.png"
-const Home = () => {
+import brand_identity_light from "../../assets/img/brand_identity_light.png";
+const Home = ({ loggedIn, handleLogout }) => {
   return (
     <div className="w-full h-full d-center">
       <div>
@@ -29,10 +29,18 @@ const Home = () => {
           <div className="logo">
             <h1 className="text-2xl">asw-1ni</h1>
           </div>
-          <div className="d-center gap-3 h2">
-            <Link to="/auth/login">Login</Link>
-            <Link to="/auth/signup">Signup</Link>
-          </div>
+          {loggedIn ? (
+            <div className="d-center gap-3 h2">
+              <button className="unbtn" onClick={() => handleLogout()}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="d-center gap-3 h2">
+              <Link to="/auth/login">Login</Link>
+              <Link to="/auth/signup">Signup</Link>
+            </div>
+          )}
         </header>
 
         {/* Hero Section */}
@@ -48,12 +56,21 @@ const Home = () => {
                   like a breeze
                 </p>
                 <div className="flex flex-col items-start p-3 gap-2">
-                  <Link
-                    to="/get-started"
-                    className="btn bg-white text-blue-500 px-4 py-2 rounded "
-                  >
-                    Get Started
-                  </Link>
+                  {loggedIn ? (
+                    <Link
+                      to="/menu"
+                      className="btn bg-white text-blue-500 px-4 py-2 rounded "
+                    >
+                      Menu
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/get-started"
+                      className="btn bg-white text-blue-500 px-4 py-2 rounded "
+                    >
+                      Get Started
+                    </Link>
+                  )}
                   <Link
                     to="/guides"
                     className="btn bg-white text-blue-500 px-4 py-2 rounded"
@@ -116,44 +133,46 @@ const Home = () => {
         <footer className="bg-white text-dark text-center md:p-5 p-2">
           <div className="top_row d-center justify-between  flex-wrap gap-4 gap-y-5">
             <div className="left">
-              <img src={brand_identity_light} width={200} height={200}/>
+              <img src={brand_identity_light} width={200} height={200} />
             </div>
             <div className="right flex-grow flex justify-between flex-wrap gap-y-5">
-            <div className="links d-center h-full">
-              <div className="links font-I flex h-full flex-col items-start">
-                <Link to="/privacy" className="whitespace-nowrap">
-                  Privacy Policy
-                </Link>
-                <Link to="/terms" className="whitespace-nowrap">
-                  Terms of Service
-                </Link>
-                <Link to="/support" className="whitespace-nowrap">Support</Link>
-              </div>
-            </div>
-
-            <div className="contact d-center flex-col h-full flex-grow">
-              <div className="contact-info flex items-end flex-col gap-2">
-                <Link
-                  className="d-center gap-2"
-                  to={"mailto://" + company.email}
-                >
-                  <FaEnvelope size={20} />
-                  <span className="font-code flex md:!flex-row flex-col text-right">
-                    <div>{company.email.split("@")[0]}@</div>
-                    
-                    <div>{company.email.split("@")[1]}</div>
-                  </span>
-                </Link>
-                <div className="d-center gap-3">
-                  <Link to={company.socials.linkedIn}>
-                    <FaLinkedin size={35} />
-                  </Link>{" "}
-                  <Link to={company.socials.instagram}>
-                    <FaInstagram size={35} />
+              <div className="links d-center h-full">
+                <div className="links font-I flex h-full flex-col items-start">
+                  <Link to="/privacy" className="whitespace-nowrap">
+                    Privacy Policy
+                  </Link>
+                  <Link to="/terms" className="whitespace-nowrap">
+                    Terms of Service
+                  </Link>
+                  <Link to="/support" className="whitespace-nowrap">
+                    Support
                   </Link>
                 </div>
               </div>
-            </div>
+
+              <div className="contact d-center flex-col h-full flex-grow">
+                <div className="contact-info flex items-end flex-col gap-2">
+                  <Link
+                    className="d-center gap-2"
+                    to={"mailto://" + company.email}
+                  >
+                    <FaEnvelope size={20} />
+                    <span className="font-code flex md:!flex-row flex-col text-right">
+                      <div>{company.email.split("@")[0]}@</div>
+
+                      <div>{company.email.split("@")[1]}</div>
+                    </span>
+                  </Link>
+                  <div className="d-center gap-3">
+                    <Link to={company.socials.linkedIn}>
+                      <FaLinkedin size={35} />
+                    </Link>{" "}
+                    <Link to={company.socials.instagram}>
+                      <FaInstagram size={35} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="bottom_row">

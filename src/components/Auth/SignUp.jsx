@@ -60,7 +60,7 @@ function SignUp() {
                 </div>
                 <button
                   tabIndex={-1}
-                  className="unbtn"
+                  className="unbtn d-center"
                   onClick={() => {
                     setIsPassVisible((e) => {
                       console.log(e);
@@ -69,7 +69,7 @@ function SignUp() {
                   }}
                   accessKey="i"
                 >
-                  {isPassVisible ? <FaEye size={25} /> : <FaEyeSlash size={25} />}
+                  {!isPassVisible ? <FaEye size={25} /> : <FaEyeSlash size={25} />}
                 </button>
               </div>
               <button type="button" className="d-center w-full">

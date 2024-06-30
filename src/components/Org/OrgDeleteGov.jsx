@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import org from "../../utils/org";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const OrgDeleteGov = () => {
   const { id } = useParams();
-  const history = useHistory();
 
   const [name, setName] = useState("");
   const [organizationId, setOrganizationId] = useState("");
@@ -31,7 +30,6 @@ const OrgDeleteGov = () => {
     try {
       await org.deleteAsGov(id);
       setMessage("Organization deleted successfully!");
-      setTimeout(() => history.push('/orgs'), 2000);
     } catch (error) {
       setMessage("Error deleting organization");
       console.error("Error:", error);

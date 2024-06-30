@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, useHistory, useNavigate } from "react-router-dom";
 import branch from "../../utils/branch";
+import { useNavigate, useParams } from "react-router-dom";
 
 const BranchEdit = () => {
   const { id } = useParams();

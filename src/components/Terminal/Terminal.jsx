@@ -237,6 +237,7 @@ function Terminal({loggedIn,userRole}) {
   
     org: {
       create: { nav: "/gov/org/create" },
+      view:{nav:"/gov/org/get"}
     },
   
     this: {

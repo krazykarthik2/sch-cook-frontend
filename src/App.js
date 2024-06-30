@@ -84,6 +84,7 @@ const EmpRelationDelete = lazy(() =>
   import("./components/EmployeeRelation/EmpRelationDelete")
 );
 const OrgCreate =  lazy(()=>import("./components/Org/OrgCreate")); 
+const OrgList =  lazy(()=>import("./components/Org/OrgList")); 
 
 const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
@@ -147,6 +148,7 @@ function App() {
             <Route path="gov" element={<ProtectAuthRole role={userRole} permit={["governer"]}/>}>
               <Route path="org" >
                 <Route path="create" element={<OrgCreate />}/>
+                <Route path="get" element={<OrgList />}/>
               </Route>
             </Route>
               <Route path="/welcome" element={<Welcome username={username} />} />

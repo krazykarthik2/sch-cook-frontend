@@ -4,6 +4,9 @@ import axios from "axios";
 import backend from "./backend.js";
 const URLbase = backend.URLbase;
 
+async function getAll(){
+  return await axios.get(URLbase+`/organization/get`)
+}
 // Function to create an organization with admin credentials
 async function create({ name, organization_id, admin_username, admin_password }) {
   return await axios.post(URLbase + `/organization/create`, {
@@ -27,5 +30,5 @@ async function _delete(id) {
   return await axios.delete(URLbase + `/organization/delete/${id}`);
 }
 
-const org = { create, edit, _delete };
+const org = { getAll,create, edit, _delete };
 export default org;

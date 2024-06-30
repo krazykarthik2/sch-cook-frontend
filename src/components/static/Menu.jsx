@@ -120,6 +120,7 @@ const GovLinks={
 
   org: {
     create: "/gov/org/create",
+    get:"/gov/org/get"
   },
 
   general: {

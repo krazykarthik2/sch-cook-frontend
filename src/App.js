@@ -246,7 +246,7 @@ function App() {
               {/* Exception for home route */}
             </Route>
             {/* Default Route */}
-            <Route path="/menu" element={<Menu />} />
+            <Route path="/menu" element={<Menu loggedIn={loggedIn} userRole={userRole}/>} />
             <Route path="/loader" element={<BoxLoader />} />
             <Route path="/auth">
               <Route

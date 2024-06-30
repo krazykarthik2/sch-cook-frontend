@@ -99,6 +99,7 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
                 </div>
                 <button
                   tabIndex={-1}
+                  type="button"
                   className="unbtn"
                   onClick={() => {
                     setIsPassVisible((e) => {
@@ -145,13 +146,13 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
             <div className="py-5">
               <div className="grid grid-cols-2 gap-1">
                 <div className="text-center sm:text-left whitespace-nowrap">
-                  <button className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  <button type="button" className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                     <TbLockQuestion size={18} />
                     <span className="inline-block ml-1">Forgot Password</span>
                   </button>
                 </div>
                 <div className="text-center sm:text-right whitespace-nowrap">
-                  <button className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  <button type="button" className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
                     <LuHelpCircle size={18} />
                     <span className="inline-block ml-1">Help</span>
                   </button>

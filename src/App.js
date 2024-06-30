@@ -83,8 +83,13 @@ const EmpRelationEdit = lazy(() =>
 const EmpRelationDelete = lazy(() =>
   import("./components/EmployeeRelation/EmpRelationDelete")
 );
-const OrgCreate =  lazy(()=>import("./components/Org/OrgCreate")); 
-const OrgList =  lazy(()=>import("./components/Org/OrgList")); 
+const OrgCreate = lazy(() => import("./components/Org/OrgCreate"));
+const OrgList = lazy(() => import("./components/Org/OrgList"));
+const OrgSingle = lazy(() => import("./components/Org/OrgSingle"));
+const OrgEditGov = lazy(() => import("./components/Org/OrgEditGov"));
+const OrgEditAdmin = lazy(() => import("./components/Org/OrgEditAdmin"));
+const OrgDeleteAdmin = lazy(() => import("./components/Org/OrgDeleteAdmin"));
+const OrgDeleteGov = lazy(() => import("./components/Org/OrgDeleteGov"));
 
 const Home = lazy(() => import("./components/static/Home"));
 const Menu = lazy(() => import("./components/static/Menu"));
@@ -103,7 +108,8 @@ function App() {
   }, []);
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [username, setUsername] = useState("");
-  const [userRole,setUserRole] = useState("")
+  const [userRole, setUserRole] = useState("");
+  const [userOrg, setUserOrg] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
     const jwtCookie = cookies.jwt;
@@ -113,7 +119,8 @@ function App() {
         .useJWT(jwtCookie)
         .then((response) => {
           setUsername(response.data.user.username);
-          setUserRole(response.data.user.role)
+          setUserRole(response.data.user.role);
+          setUserOrg(response.data.user.organization);
           setLoggedIn(true);
         })
         .catch((error) => {
@@ -129,29 +136,45 @@ function App() {
   };
   function handleLogin({ token, user }) {
     setLoginCookie(token);
-          setUserRole(user.role)
-          setUsername(user.username);
+    setUserRole(user.role);
+    setUsername(user.username);
+    setUserOrg(user.organization);
   }
 
   const handleLogout = () => {
     removeCookie("jwt");
     setLoggedIn(false);
     setUsername("");
-          setUserRole("")
-        };
+    setUserRole("");
+    setUserOrg(null);
+  };
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
         <Router>
           <Routes>
             <Route path="" element={<ProtectAuth loggedIn={loggedIn} />}>
-            <Route path="gov" element={<ProtectAuthRole role={userRole} permit={["governer"]}/>}>
-              <Route path="org" >
-                <Route path="create" element={<OrgCreate />}/>
-                <Route path="get" element={<OrgList />}/>
+              <Route
+                path="gov"
+                element={
+                  <ProtectAuthRole role={userRole} permit={["governer"]} />
+                }
+              >
+                <Route path="org">
+                  <Route path="create" element={<OrgCreate />} />
+                  <Route path="get" element={<OrgList />} />
+                  <Route path="edit">
+                    <Route path=":id" element={<OrgEditGov />} />
+                  </Route>
+                  <Route path="delete">
+                    <Route path=":id" element={<OrgDeleteGov />} />
+                  </Route>
+                </Route>
               </Route>
-            </Route>
-              <Route path="/welcome" element={<Welcome username={username} />} />
+              <Route
+                path="/welcome"
+                element={<Welcome username={username} />}
+              />
               {/* Employee Routes */}
               <Route path="employee">
                 <Route path="create" element={<EmployeeCreate />} />
@@ -244,11 +267,28 @@ function App() {
                   <Route path=":id" element={<EmpRelationDelete />} />
                 </Route>
               </Route>
-              <Route path="/" element={<Home loggedIn={loggedIn} handleLogout={handleLogout}/>} />
+              <Route path="org">
+                  <Route path="get" element={<OrgSingle />} />
+                  <Route path="edit">
+                    <Route path=":id" element={<OrgEditAdmin />} />
+                  </Route>
+                  <Route path="delete">
+                    <Route path=":id" element={<OrgDeleteAdmin />} />
+                  </Route>
+                </Route>
+              <Route
+                path="/"
+                element={
+                  <Home loggedIn={loggedIn} handleLogout={handleLogout} />
+                }
+              />
               {/* Exception for home route */}
             </Route>
             {/* Default Route */}
-            <Route path="/menu" element={<Menu loggedIn={loggedIn} userRole={userRole}/>} />
+            <Route
+              path="/menu"
+              element={<Menu loggedIn={loggedIn} userRole={userRole} />}
+            />
             <Route path="/loader" element={<BoxLoader />} />
             <Route path="/auth">
               <Route
@@ -262,7 +302,11 @@ function App() {
             <Route path="*" element={<E404 />} />
           </Routes>
 
-          <Terminal loggedIn={loggedIn} userRole={userRole}/>
+          <Terminal
+            loggedIn={loggedIn}
+            userRole={userRole}
+            handleLogout={handleLogout}
+          />
         </Router>
       </Suspense>
     </>

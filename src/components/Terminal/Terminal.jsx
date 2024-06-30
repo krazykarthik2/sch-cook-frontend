@@ -31,7 +31,7 @@ function considerShortcut(e) {
   e.stopPropagation();
   return false;
 }
-function Terminal({loggedIn,userRole}) {
+function Terminal({loggedIn,userRole,handleLogout}) {
   const [isActive, setIsActive] = useState(false);
 
   const [command, setCommand] = useState("");
@@ -169,6 +169,7 @@ function Terminal({loggedIn,userRole}) {
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
+      logout:{fx:()=>{handleLogout();navigate("/")}}
     },
   };
   const AdminLinks = {
@@ -222,7 +223,9 @@ function Terminal({loggedIn,userRole}) {
       delete: { nav: "/relation/delete/:id" },
     },
     org: {
-      create: { nav: "/gov/org/create" },
+      get:{nav:"/admin/org/get"},
+      edit: { nav: "/admin/org/edit" },
+      delete: { nav: "/admin/org/delete" },
     },
   
     this: {
@@ -230,6 +233,7 @@ function Terminal({loggedIn,userRole}) {
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
+      logout:{fx:()=>{handleLogout();navigate("/")}}
     },
   };
   
@@ -237,22 +241,36 @@ function Terminal({loggedIn,userRole}) {
   
     org: {
       create: { nav: "/gov/org/create" },
+      edit: { nav: "/gov/org/edit/:id" },
+      delete: { nav: "/gov/org/delete/:id" },
       view:{nav:"/gov/org/get"}
     },
   
-    this: {
+  this: {
       home: { nav: "/" },
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
+      logout:{fx:()=>{handleLogout();navigate("/")}}
     },
   };
+  const nonAuthLinks ={
+    
+  this: {
+    home: { nav: "/" },
+    menu: { nav: "/menu" },
+    loader: { nav: "/loader" },
+    exit: { fx: () => setIsActive(false) },
+    login:{nav:"/auth/login"},
+    signup:{nav:"/auth/signup"}
+  },
+  }
   const directory={
     viewer:ViewerLinks,
     admin:AdminLinks,
     governer:GovLinks,
   }
-  const links = loggedIn?directory[userRole]:{};
+  const links = loggedIn?directory[userRole]:nonAuthLinks;
   ////////
 
   function acceptSuggestion() {
@@ -348,6 +366,7 @@ function Terminal({loggedIn,userRole}) {
             <input
               type="text"
               value={bestSugg_}
+              onChange={()=>{}}
               className="absolute  left-0 pointer-events-none !border-none !bg-transparent !p-0 !ps-3 !outline-none !text-gray font-code"
             />
             <input
@@ -359,11 +378,11 @@ function Terminal({loggedIn,userRole}) {
                 if (isValid) if (e.key == "Enter") exec();
               }}
               autoFocus={true}
-              autoCapitalize={false}
-              autoComplete={false}
-              autoCorrect={false}
-              autoSave={false}
-              spellCheck={false}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="false"
+              autoSave="false"
+              spellCheck="false"
               onFocus={() => setTerminalFocused(true)}
               onBlur={() => setTerminalFocused(false)}
               className="absolute left-0 !border-none !bg-transparent !p-0 !ps-3 !outline-none !text-white font-code"

@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+window.x_ = [];
 function LinkBtn({ name, to }) {
+  console.log("to", to);
+  window.x_.push(to);
   return (
     <Link to={to} className={"btn " + (to.includes(":") ? "disabled" : "")}>
       {name}
@@ -9,6 +12,7 @@ function LinkBtn({ name, to }) {
   );
 }
 function Card({ title, val }) {
+  window.title = title;
   return (
     <div className="card flex flex-col gap-2">
       <h2>{title}</h2>
@@ -87,9 +91,8 @@ const AdminLinks = {
   timetable: {
     get: "/branch/:branch_id/section/:section_id/timetable/get",
     edit: "/branch/:branch_id/section/:section_id/timetable/edit",
-    delete: {
-      nav: "/branch/:branch_id/section/:section_id/timetable/delete",
-    },
+    delete: "/branch/:branch_id/section/:section_id/timetable/delete",
+    
   },
   sub: {
     get: "/subject/get",
@@ -106,7 +109,8 @@ const AdminLinks = {
     delete: "/relation/delete/:id",
   },
   org: {
-    create: "/gov/org/create",
+    edit: "/admin/org/edit", 
+    delete: "/admin/org/delete",
   },
 
   general: {
@@ -116,11 +120,10 @@ const AdminLinks = {
   },
 };
 
-const GovLinks={
-
+const GovLinks = {
   org: {
     create: "/gov/org/create",
-    get:"/gov/org/get"
+    get: "/gov/org/get",
   },
 
   general: {
@@ -129,14 +132,23 @@ const GovLinks={
     loader: "/loader",
   },
 };
-const directory={
-  viewer:ViewerLinks,
-  admin:AdminLinks,
-  governer:GovLinks,
-}
-function Menu({loggedIn,userRole}) {
-  
-  const routes = loggedIn?directory[userRole]:{};
+const nonAuthLinks = {
+  general: {
+    home: "/",
+    menu: "/menu",
+    loader: "/loader",
+    login: "/auth/login",
+    signup: "/auth/signup",
+  },
+};
+const directory = {
+  viewer: ViewerLinks,
+  admin: AdminLinks,
+  governer: GovLinks,
+};
+function Menu({ loggedIn, userRole }) {
+  const routes = loggedIn ? directory[userRole] : nonAuthLinks;
+  window.routes = routes;
   return (
     <main>
       <h1 className="text-2xl">Menu</h1>

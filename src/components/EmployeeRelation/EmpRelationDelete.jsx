@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import emprelation from "../../utils/emprelation";
 import { FaTrashAlt } from "react-icons/fa";
+import { toastThis } from "../../utils/fx";
 
 const EmpRelationDelete = () => {
   const { id } = useParams();
@@ -11,12 +12,14 @@ const EmpRelationDelete = () => {
   const [relation__, setRelation__] = useState({});
 
   const handleDelete = () => {
+    toastThis(()=>
     emprelation
-      ._delete(id)
-      .then(() => navigate("/relation/get"))
-      .catch((error) =>
-        console.error("Error deleting employee relation:", error)
-      );
+      ._delete(id),() => navigate("/relation/get")
+      ,{
+        pending:`Deleting Employee Relation`,
+        error:`Error deleting Employee Relation`,
+        success:`Employee Relation Deleted Successfully`
+      })
   };
   const fetchRelation = async () => {
     try {

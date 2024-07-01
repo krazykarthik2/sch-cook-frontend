@@ -10,7 +10,6 @@ const BranchSingle = () => {
   const branch_id = useParams()["id"];
 
   const [branch_, setBranch_] = useState({});
-  window.branch_ = branch_;
   const fetchBranch = async (e) => {
     try {
       const response = await branch.get(branch_id);

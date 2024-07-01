@@ -1,11 +1,11 @@
 // File: src/components/Subject/SubjectDelete.jsx
 
 import React, { useEffect, useState } from "react";
-import { FaInfoCircle, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import Info from "../utils/Info";
 import subject from "../../utils/subject";
+import Info from "../utils/Info";
+import { toastThis } from "../../utils/fx";
 const SubjectDelete = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,10 +21,15 @@ const SubjectDelete = () => {
   };
 
   const handleDelete = () => {
-    subject
-      ._delete(id)
-      .then(() => navigate(`/subject/get`))
-      .catch((error) => console.error("Error deleting subject:", error));
+    toastThis(
+      () => subject._delete(id),
+      () => navigate(`/subject/get`),
+      {
+        pending: `Deleting Subject ${id}`,
+        error: `Error Deleting Subject ${id}`,
+        success: `Subject ${id} deleted successfully `,
+      }
+    );
   };
 
   useEffect(() => {

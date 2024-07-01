@@ -1,40 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash, FaInfoCircle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   HiOutlineArrowNarrowLeft,
   HiOutlineArrowNarrowRight,
 } from "react-icons/hi";
-import { AlertError, AlertInfo } from "../utils/Alerts";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { TbLockQuestion } from "react-icons/tb";
 import { LuHelpCircle } from "react-icons/lu";
+import { TbLockQuestion } from "react-icons/tb";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import auth from "../../utils/auth";
-function Login({loggedIn,handleLogin:props_handleLogin}) {
+import { toastThis } from "../../utils/fx";
+import { AlertError, AlertInfo } from "../utils/Alerts";
+function Login({ loggedIn, handleLogin: props_handleLogin }) {
   const [isPassVisible, setIsPassVisible] = useState(false);
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [processing_req, setProcessing] = useState(false);
   const [error, setError] = useState("");
-  const [searchParams,searchfx] = useSearchParams();
+  const [searchParams, searchfx] = useSearchParams();
   const navigate = useNavigate();
-  useEffect(()=>{
-    if(loggedIn){
-      navigate(searchParams.get('continue')||'/welcome')
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(searchParams.get("continue") || "/welcome");
     }
-  },[loggedIn])
+  }, [loggedIn]);
   const location = useLocation();
   useEffect(() => {
     if (location && location.state) {
       setFormData({
-        username: location.state.username||formData.username,
-        password: location.state.password||formData.password,
+        username: location.state.username || formData.username,
+        password: location.state.password || formData.password,
       });
     }
   }, [location]);
   const handleLogin = async () => {
     try {
-      const response = await auth.login(formData.username, formData.password);
-      console.log("Login successful", response.data);
-      props_handleLogin(response.data)
+      toastThis(
+        () => auth.login(formData.username, formData.password),
+        (response) => props_handleLogin(response.data),
+        {
+          pending: `Trying to Login as ${formData.username}`,
+          error: `Error logging in as ${formData.username}`,
+          success: `Logged in as ${formData.username}`,
+        }
+      );
       setError("");
       // Handle successful login (e.g., save token, redirect)
     } catch (err) {
@@ -44,7 +57,7 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
   };
   async function handleSubmit(e) {
     e.preventDefault();
-    setIsPassVisible(false)
+    setIsPassVisible(false);
     try {
       const result = await handleLogin();
       setProcessing(false);
@@ -103,7 +116,6 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
                   className="unbtn"
                   onClick={() => {
                     setIsPassVisible((e) => {
-                      console.log(e);
                       return !e;
                     });
                   }}
@@ -146,13 +158,19 @@ function Login({loggedIn,handleLogin:props_handleLogin}) {
             <div className="py-5">
               <div className="grid grid-cols-2 gap-1">
                 <div className="text-center sm:text-left whitespace-nowrap">
-                  <button type="button" className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  <button
+                    type="button"
+                    className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset"
+                  >
                     <TbLockQuestion size={18} />
                     <span className="inline-block ml-1">Forgot Password</span>
                   </button>
                 </div>
                 <div className="text-center sm:text-right whitespace-nowrap">
-                  <button type="button" className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
+                  <button
+                    type="button"
+                    className="unbtn d-center transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset"
+                  >
                     <LuHelpCircle size={18} />
                     <span className="inline-block ml-1">Help</span>
                   </button>

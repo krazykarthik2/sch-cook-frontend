@@ -36,8 +36,8 @@ function Recommend({
           ?.split(":")
           .map((e) => e.split("/")[0])
           .slice(1)
-          .map((e) => (
-            <span className="bg-gray-500 rounded-md p-1">{e}</span>
+          .map((e,i) => (
+            <span key={i} className="bg-gray-500 rounded-md p-1">{e}</span>
           ))}
       </span>
     </button>
@@ -52,7 +52,6 @@ function RecommendSecond({
   setBestSuggestion,
 }) {
   const [sim_sort, setSim_sort] = useState([]);
-  window.sim = sim_sort;
   useEffect(() => {
     let index = sim_sort.findIndex((e) => e == true);
     if (index == -1) setBestSuggestion("");

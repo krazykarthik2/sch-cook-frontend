@@ -57,8 +57,6 @@ const EmployeeSchedule = () => {
   const [hideSubName, setHideSubName] = useState(false);
   const [hideRoomId, setHideRoomId] = useState(false);
   const [employee__, setEmployee__] = useState({});
-  window.subjects = subjects;
-  window.subject = subject;
   const fetchSubjects = async (arr) => {
     try {
       const response = await subject.getAll(arr);

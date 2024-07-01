@@ -1,15 +1,17 @@
 // File: src/components/AuthWall.jsx
 
 import React from "react";
+import { FaArrowRight } from "react-icons/fa";
 import { RiAdminLine } from "react-icons/ri";
 import { VscError } from "react-icons/vsc";
+import { Link } from "react-router-dom";
 
 const AuthWall = () => {
   return (
     <div className="flex  items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-10 rounded shadow-lg text-center">
         <div className="d-center flex-col  text-red-600">
-      <VscError size={150} color="currentColor"/>
+          <VscError size={150} color="currentColor" />
           <h1 className="text-9xl font-bold mb-4">403</h1>
         </div>
         <div className="d-center">
@@ -21,6 +23,12 @@ const AuthWall = () => {
         <p className="text-3xl text-gray-600">
           You do not have permission to access this page.
         </p>
+        <div className="d-center">
+          <Link to={"/auth/login"} className="btn flex w-min">
+            <span>Login</span>
+            <FaArrowRight size={24} />
+          </Link>
+        </div>
       </div>
     </div>
   );

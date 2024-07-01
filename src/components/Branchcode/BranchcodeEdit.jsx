@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import branchcode from "../../utils/branchcode";
 import { useNavigate, useParams } from "react-router-dom";
+import { toastThis } from "../../utils/fx";
 
 const BranchcodeEdit = () => {
   const branch_code = useParams()["branch_code"];
@@ -16,8 +17,11 @@ const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await branchcode.edit(branch_code, { name: editedName });
-    navigate("/branchcode/get/")
+    toastThis(()=>branchcode.edit(branch_code, { name: editedName }),()=>navigate("/branchcode/get/"),{
+      pending:`Modifying BranchCode ${branchCode}`,
+      error:`Error modifying BranchCode ${branchCode}`,
+      success:`BranchCode ${branchCode} created successfully`
+    })
   };
 
   return (

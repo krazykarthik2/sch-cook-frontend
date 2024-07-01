@@ -60,7 +60,7 @@
     opacity: 0.7;
     cursor: not-allowed;
   }
-  button:not(.unbtn),
+  button:not(.unbtn):not(.Toastify__close-button),
   .btn:not(.unbtn) {
     background-color: theme("colors.rose.500");
     border-radius: theme("borderRadius.xl");

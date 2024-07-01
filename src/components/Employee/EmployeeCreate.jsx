@@ -1,18 +1,22 @@
 import React, { useState } from "react";
-import axios from "axios";
 import employee from "../../utils/employee";
 
+import { ToastContainer, toast } from "react-toastify";
 const EmployeeCreate = () => {
   const [name, setName] = useState("");
   const [emp_id, setEmpId] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await employee.create({ name, emp_id });
+
+    if (emp_id && name) {
+      toast.promise(employee.create({ name, emp_id }), {
+        pending: `Creating ${name} as ${emp_id}`,
+        error: `Error creating employee`,
+        success: `Employee Created Successfully`,
+      });
       setEmpId("");
       setName("");
-    } catch (error) {
-      console.error("Error creating employee:", error);
     }
   };
 
@@ -30,7 +34,9 @@ const EmployeeCreate = () => {
           id="id"
           type="text"
           value={emp_id}
-          onChange={(e) => setEmpId(e.target.value)}
+          onChange={(e) =>
+            setEmpId(e.target.value.toUpperCase().split(" ").join(""))
+          }
           placeholder="employee id"
         />
         <label htmlFor="name" className="font-I">

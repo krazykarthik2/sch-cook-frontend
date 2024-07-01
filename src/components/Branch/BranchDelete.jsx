@@ -1,12 +1,11 @@
 // File: src/components/Branch/BranchDelete.jsx
 
 import React, { useEffect, useState } from "react";
-import { FaInfoCircle, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import branch from "../../utils/branch";
 import Info from "../utils/Info";
-
+import {toastThis} from "../../utils/fx"
 const BranchDelete = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,10 +21,12 @@ const BranchDelete = () => {
   };
 
   const handleDelete = () => {
-    branch
-      ._delete(id)
-      .then(() => navigate(`/branch/list`))
-      .catch((error) => console.error("Error deleting branch:", error));
+    toastThis(()=>branch._delete(id),() => navigate(`/branch/list`),
+      {
+        pending:`Deleting branch ${id}`,
+        error:`Error in deleting branch ${id}`,
+        success:`Branch ${id} deleted successfully`
+      })
   };
 
   useEffect(() => {

@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import employee from "../../utils/employee";
-
+import { toast } from "react-toastify";
+import { toastThis } from "../../utils/fx";
 const EmployeeEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,8 +24,10 @@ const EmployeeEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      employee.edit(id, { name }).then((e) => {
-        if (e) navigate("/employee/get");
+      toastThis(()=>employee.edit(id, { name }), () => navigate("/employee/get"), {
+        pending: `editing employee ${id}`,
+        error: `An error occurred`,
+        success: `Employee #${id} modified successfully`,
       });
     } catch (error) {
       console.error("Error editing employee:", error);

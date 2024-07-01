@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import org from "../../utils/org";
+import { toastThis } from "../../utils/fx";
 
 const OrgDeleteAdmin = () => {
-
   const [name, setName] = useState("");
   const [organizationId, setOrganizationId] = useState("");
-  const [message, setMessage] = useState("");
-  
+
   useEffect(() => {
     fetchOrganization();
   }, []);
@@ -16,7 +15,7 @@ const OrgDeleteAdmin = () => {
   const fetchOrganization = async () => {
     try {
       const response = await org.getMyOrg();
-      const { name, org_id:organization_id } = response.data;
+      const { name, org_id: organization_id } = response.data;
       setName(name);
       setOrganizationId(organization_id);
     } catch (error) {
@@ -25,13 +24,15 @@ const OrgDeleteAdmin = () => {
   };
 
   const handleDelete = async () => {
-    try {
-      await org._delete();
-      setMessage("Organization deleted successfully!");
-    } catch (error) {
-      setMessage("Error deleting organization");
-      console.error("Error:", error);
-    }
+    toastThis(
+      () => org._delete(),
+      () => {},
+      {
+        pending: `Deleting Your Organization ${organizationId}`,
+        error: `Error deleting your Organization ${organizationId}`,
+        success: `Your Organization ${organizationId} deleted successfully`,
+      }
+    );
   };
 
   return (
@@ -49,7 +50,6 @@ const OrgDeleteAdmin = () => {
       >
         Delete Organization as Admin
       </button>
-      {message && <p className="mt-4">{message}</p>}
     </div>
   );
 };

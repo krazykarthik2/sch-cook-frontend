@@ -5,6 +5,7 @@ import subject from "../../utils/subject";
 import emprelation from "../../utils/emprelation";
 import FormSelect from "../utils/FormSelect";
 import { useLocation } from "react-router-dom";
+import { toastThis } from "../../utils/fx";
 
 const EmpRelationCreate = () => {
   const [empId, setEmpId] = useState("");
@@ -83,20 +84,26 @@ const EmpRelationCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await emprelation.create({
-        emp_id: empId,
-        branch_id: branchId,
-        sec_id: secId,
-        subject_id: subjectId,
-      });
-      setEmpId("");
-      setBranchId("");
-      setSecId("");
-      setSubjectId("");
-    } catch (error) {
-      console.error("Error creating relation:", error);
-    }
+    toastThis(
+      () =>
+        emprelation.create({
+          emp_id: empId,
+          branch_id: branchId,
+          sec_id: secId,
+          subject_id: subjectId,
+        }),
+      () => {
+        setEmpId("");
+        setBranchId("");
+        setSecId("");
+        setSubjectId("");
+      },
+      {
+        pending: `Creating Employee Relation`,
+        error: `Error Creating Employee Relation`,
+        success: `Employee Relation Created Successfully`,
+      }
+    );
   };
 
   return (

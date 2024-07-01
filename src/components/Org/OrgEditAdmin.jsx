@@ -3,10 +3,9 @@
 import React, { useState, useEffect } from "react";
 import org from "../../utils/org";
 
-const OrgEditAdmin = ({ userOrg }) => {
+const OrgEditAdmin = () => {
   const [name, setName] = useState("");
   const [organizationId, setOrganizationId] = useState("");
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchOrganization();
@@ -17,22 +16,25 @@ const OrgEditAdmin = ({ userOrg }) => {
       const response = await org.getMyOrg();
       const { name, org_id: organization_id } = response.data;
       setName(name);
-      setOrganizationId(organizationId);
+      setOrganizationId(organization_id);
     } catch (error) {
       console.error("Error fetching organization:", error);
     }
   };
 
   const handleEdit = async () => {
-    try {
-      await org.edit({
-        name,
-      });
-      setMessage("Organization updated successfully!");
-    } catch (error) {
-      setMessage("Error updating organization");
-      console.error("Error:", error);
-    }
+    toastThis(
+      () =>
+        org.edit({
+          name,
+        }),
+      () => {},
+      {
+        pending: `Modifying Organization ${organizationId}`,
+        error: `Error modifying Organization ${organizationId}`,
+        success: `Organization ${organizationId} modified successfully`,
+      }
+    );
   };
 
   return (
@@ -53,7 +55,6 @@ const OrgEditAdmin = ({ userOrg }) => {
       >
         Update Organization
       </button>
-      {message && <p className="mt-4">{message}</p>}
     </div>
   );
 };

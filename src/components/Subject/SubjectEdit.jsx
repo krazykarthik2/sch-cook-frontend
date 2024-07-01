@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import subject from "../../utils/subject";
+import { toastThis } from "../../utils/fx";
 
 const SubjectEdit = () => {
   const { id } = useParams();
@@ -22,17 +23,20 @@ const SubjectEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await subject.edit(id, { name: subjectName });
-      navigate("/subject/get");
-    } catch (error) {
-      console.error("Error editing subject:", error);
-    }
+    toastThis(
+      () => subject.edit(id, { name: subjectName }),
+      () => navigate("/subject/get"),
+      {
+        pending: `Modifying Subject ${id}`,
+        error: `Error Modifying Subject ${id}`,
+        success: `Subject ${id} modified successfully `,
+      }
+    );
   };
 
   return (
     <div>
-      <h2>Edit Subject</h2> 
+      <h2>Edit Subject</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

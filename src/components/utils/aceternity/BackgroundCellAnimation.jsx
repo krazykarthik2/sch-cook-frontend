@@ -137,7 +137,6 @@ const Pattern = ({
   );
 };
 export default BackgroundCellAnimation;
-window._ = [];
 function Cell({
   clickedCell,
   setHoveredCell,

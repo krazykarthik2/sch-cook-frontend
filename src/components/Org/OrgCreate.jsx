@@ -3,28 +3,34 @@
 import React, { useState } from "react";
 import org from "../../utils/org";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toastThis } from "../../utils/fx";
 
 const OrgCreate = () => {
   const [name, setName] = useState("");
   const [organizationId, setOrganizationId] = useState("");
   const [adminUsername, setAdminUsername] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [isPassVisible, setIsPassVisible] = useState(false);
 
   const handleCreateOrg = async () => {
-    try {
-      await org.create({
-        name,
-        organization_id: organizationId,
-        admin_username: adminUsername,
-        admin_password: adminPassword,
-      });
-      setMessage("Organization created successfully!");
-    } catch (error) {
-      setMessage("Error creating organization");
-      console.error("Error:", error);
-    }
+    
+      toastThis(
+        () =>
+          org.create({
+            name,
+            organization_id: organizationId,
+            admin_username: adminUsername,
+            admin_password: adminPassword,
+          }),
+        () => {
+        },
+        {
+          pending: `Creating Organization ${id}`,
+          error: `Error creating organization ${id}`,
+          success: `Organization ${id} created successfully`,
+        }
+      );
+  
   };
 
   return (
@@ -56,7 +62,7 @@ const OrgCreate = () => {
       />
       <div className="flex justify-between gap-3">
         <input
-          type={isPassVisible?"text":"password"}
+          type={isPassVisible ? "text" : "password"}
           placeholder="Admin Password"
           value={adminPassword}
           autoComplete={false}
@@ -68,7 +74,6 @@ const OrgCreate = () => {
           className="unbtn"
           onClick={() => {
             setIsPassVisible((e) => {
-              console.log(e);
               return !e;
             });
           }}
@@ -84,7 +89,6 @@ const OrgCreate = () => {
       >
         Create Organization
       </button>
-      {message && <p className="mt-4">{message}</p>}
     </div>
   );
 };

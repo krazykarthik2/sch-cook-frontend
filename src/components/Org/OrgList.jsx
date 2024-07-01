@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 const OrgList = () => {
   const [organizations, setOrganizations] = useState([]);
-  window.orgs = organizations;
   useEffect(() => {
     fetchOrganizations();
   }, []);

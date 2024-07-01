@@ -1,16 +1,18 @@
 // File: src/App.jsx
 
+import { jwtDecode } from "jwt-decode"; // Ensure you have jwt-decode installed
 import React, { Suspense, lazy, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { ProtectAuth, ProtectAuthRole } from "./ProtectAuth";
 import Terminal from "./components/Terminal";
 import E404 from "./components/static/E404";
 import BoxLoader from "./components/utils/Loader/BoxLoader";
 import "./fonts.css";
 import "./index.css";
-import { useCookies } from "react-cookie";
-import axios from "axios";
 import auth from "./utils/auth";
+import { ToastContainer } from "react-toastify";
 const SubjectList = lazy(() => import("./components/Subject/SubjectList"));
 const SubjectSingle = lazy(() => import("./components/Subject/SubjectSingle"));
 const EmpRelationSingle = lazy(() =>
@@ -70,7 +72,6 @@ const TimetableDelete = lazy(() =>
 const SubjectCreate = lazy(() => import("./components/Subject/SubjectCreate"));
 const SubjectEdit = lazy(() => import("./components/Subject/SubjectEdit"));
 const SubjectDelete = lazy(() => import("./components/Subject/SubjectDelete"));
-
 const EmpRelationGet = lazy(() =>
   import("./components/EmployeeRelation/EmpRelationGet")
 );
@@ -111,23 +112,37 @@ function App() {
   const [userRole, setUserRole] = useState("");
   const [userOrg, setUserOrg] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  window.auth = { username, userRole, userOrg };
+
+  const [secsLeft, setSecsLeft] = useState(null);
+
   useEffect(() => {
     const jwtCookie = cookies.jwt;
-    window.cookies = cookies;
     if (jwtCookie) {
-      auth
-        .useJWT(jwtCookie)
-        .then((response) => {
-          setUsername(response.data.user.username);
-          setUserRole(response.data.user.role);
-          setUserOrg(response.data.user.organization);
-          setLoggedIn(true);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch user:", error);
-          // Optional: Handle invalid or expired JWT token
-          removeCookie("jwt");
+      const decodedToken = jwtDecode(jwtCookie);
+      const expirationTime = decodedToken.exp * 1000; // exp is in seconds, convert to ms
+      const currentTime = Date.now();
+      const timeLeft = expirationTime - currentTime;
+
+      if (timeLeft > 0) {
+        setSecsLeft(Math.floor(timeLeft / 1000));
+        tryJWTLogin(jwtCookie);
+      } else {
+        handleLogout();
+        setSecsLeft(0);
+      }
+
+      const intervalId = setInterval(() => {
+        setSecsLeft((prevSecs) => {
+          if (prevSecs > 0) {
+            return prevSecs - 1;
+          } else {
+            clearInterval(intervalId);
+            return 0;
+          }
         });
+      }, 1000);
+      return () => clearInterval(intervalId);
     }
   }, [cookies.jwt, removeCookie]);
 
@@ -148,6 +163,21 @@ function App() {
     setUserRole("");
     setUserOrg(null);
   };
+  function tryJWTLogin(jwtToken) {
+    auth
+      .useJWT(jwtToken)
+      .then((response) => {
+        setUsername(response.data.user.username);
+        setUserRole(response.data.user.role);
+        setUserOrg(response.data.user.organization);
+        setLoggedIn(true);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user:", error);
+        handleLogout();
+        removeCookie("jwt");
+      });
+  }
   return (
     <>
       <Suspense fallback={<BoxLoader />}>
@@ -267,15 +297,14 @@ function App() {
                   <Route path=":id" element={<EmpRelationDelete />} />
                 </Route>
               </Route>
-              <Route path="org">
+
+              <Route path="admin">
+                <Route path="org">
                   <Route path="get" element={<OrgSingle />} />
-                  <Route path="edit">
-                    <Route path=":id" element={<OrgEditAdmin />} />
-                  </Route>
-                  <Route path="delete">
-                    <Route path=":id" element={<OrgDeleteAdmin />} />
-                  </Route>
+                  <Route path="edit" element={<OrgEditAdmin />} />
+                  <Route path="delete" element={<OrgDeleteAdmin />} />
                 </Route>
+              </Route>
               <Route
                 path="/"
                 element={
@@ -303,9 +332,19 @@ function App() {
           </Routes>
 
           <Terminal
+            secsLeft={secsLeft}
             loggedIn={loggedIn}
             userRole={userRole}
             handleLogout={handleLogout}
+          />
+          <ToastContainer
+            position="bottom-center"
+            newestOnTop={false}
+            closeOnClick
+            draggable
+            pauseOnHover
+            theme="light"
+            stacked
           />
         </Router>
       </Suspense>

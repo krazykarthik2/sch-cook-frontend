@@ -14,10 +14,9 @@ async function getAll() {
 async function get(id) {
   return await axios.get(URLbase + `/branch/get/${id}`);
 }
-async function edit(id, { year, branch_code, branch_id }) {
+async function edit(id, { year, branch_code }) {
   return await axios.post(URLbase + `/branch/edit/${id}`, {
     year,
-    branch_id,
     branch_code,
   });
 }

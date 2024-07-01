@@ -1,10 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-window.x_ = [];
 function LinkBtn({ name, to }) {
-  console.log("to", to);
-  window.x_.push(to);
   return (
     <Link to={to} className={"btn " + (to.includes(":") ? "disabled" : "")}>
       {name}
@@ -12,7 +9,6 @@ function LinkBtn({ name, to }) {
   );
 }
 function Card({ title, val }) {
-  window.title = title;
   return (
     <div className="card flex flex-col gap-2">
       <h2>{title}</h2>
@@ -147,8 +143,7 @@ const directory = {
   governer: GovLinks,
 };
 function Menu({ loggedIn, userRole }) {
-  const routes = loggedIn ? directory[userRole] : nonAuthLinks;
-  window.routes = routes;
+  const routes = (loggedIn&&userRole) ? directory[userRole] : nonAuthLinks;
   return (
     <main>
       <h1 className="text-2xl">Menu</h1>

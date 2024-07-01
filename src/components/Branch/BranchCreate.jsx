@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { FaAngleRight } from "react-icons/fa";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import branch from "../../utils/branch";
 import branchcode from "../../utils/branchcode";
-import { FaAngleDown, FaAngleRight, FaArrowDown } from "react-icons/fa";
 import YouMightNeed from "../utils/YouMightNeed";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toastThis } from "../../utils/fx";
 
 const BranchCreate = () => {
   const [year, setYear] = useState("");
   const [branchId, setBranchId] = useState("");
   const [branchCode, setBranchCode] = useState("");
   const [branchCodeOpts, setBranchCodeOpts] = useState([]);
-  const location = useLocation();
+  const [searchP, setSearchP] = useSearchParams();
   const navigate = useNavigate();
   useEffect(() => {
     branchcode.getAll().then((result) => {
@@ -19,17 +20,23 @@ const BranchCreate = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await branch.create({
-        branch_id: branchId,
-        branch_code: branchCode,
-        year: year,
-      });
-      setBranchId("");
-      navigate(location.state.__continue||"/branch/get")
-    } catch (error) {
-      console.error("Error creating branch:", error);
-    }
+    toastThis(
+      () =>
+        branch.create({
+          branch_id: branchId,
+          branch_code: branchCode,
+          year: year,
+        }),
+      () => {
+        setBranchId("");
+        navigate(searchP.get("continue") || "/branch/get");
+      },
+      {
+        pending: `Creating branch ${branchId}`,
+        error: `Error creating branch ${branchId}`,
+        success: `Branch ${branchId} created successfully`,
+      }
+    );
   };
 
   return (
@@ -43,7 +50,9 @@ const BranchCreate = () => {
           id="id"
           type="text"
           value={branchId}
-          onChange={(e) => setBranchId(e.target.value)}
+          onChange={(e) =>
+            setBranchId(e.target.value.toUpperCase().split(" ").join(""))
+          }
           placeholder="Branch ID"
         />
         <label htmlFor="year" className="font-I">
@@ -51,7 +60,8 @@ const BranchCreate = () => {
         </label>
         <input
           id="year"
-          type="text"
+          type="number"
+          min={1}
           value={year}
           onChange={(e) => setYear(e.target.value)}
           placeholder="year"
@@ -78,7 +88,10 @@ const BranchCreate = () => {
       </form>
       <YouMightNeed
         content={
-          <Link state={{__continue:"/branch/create"}} to="/branchcode/create" className="btn flex">
+          <Link
+            to="/branchcode/create?continue=/branch/create"
+            className="btn flex"
+          >
             <span> Create branch code</span> <FaAngleRight size={30} />
           </Link>
         }

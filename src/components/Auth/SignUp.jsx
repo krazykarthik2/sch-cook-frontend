@@ -63,7 +63,6 @@ function SignUp() {
                   className="unbtn d-center"
                   onClick={() => {
                     setIsPassVisible((e) => {
-                      console.log(e);
                       return !e;
                     });
                   }}

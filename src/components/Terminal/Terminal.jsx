@@ -4,6 +4,7 @@ import RecommendFirst from "./RecommendFirst";
 import RecommendSecond from "./RecommendSecond";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Exact from "./Exact";
+import { addDigits } from "../../utils/fx";
 const stop_Def_ctrl_keys = [
   "q",
   "e",
@@ -31,7 +32,7 @@ function considerShortcut(e) {
   e.stopPropagation();
   return false;
 }
-function Terminal({loggedIn,userRole,handleLogout}) {
+function Terminal({ loggedIn, userRole, handleLogout, secsLeft }) {
   const [isActive, setIsActive] = useState(false);
 
   const [command, setCommand] = useState("");
@@ -45,7 +46,6 @@ function Terminal({loggedIn,userRole,handleLogout}) {
   const ter_ref = useRef(null);
   const navigate = useNavigate();
 
-  window.ref = ter_ref;
   const [searchParams, setSearchParams] = useSearchParams();
   ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -85,8 +85,6 @@ function Terminal({loggedIn,userRole,handleLogout}) {
     //manage the shortcuts
     const fx = (e) => {
       if (e.ctrlKey) {
-        console.log("ctrl" + e.key);
-
         if (
           stop_Def_ctrl_keys.includes(e.key) ||
           stop_Def_ctrl_keys.map((e) => e.toUpperCase()).includes(e.key)
@@ -94,6 +92,9 @@ function Terminal({loggedIn,userRole,handleLogout}) {
           if (e.key == "q" || e.key == "Q") {
             setIsActive((e) => !e);
             focusTerminal();
+          }
+          if (e.key == "m" || e.key == "M") {
+            navigate("/menu");
           }
           return considerShortcut(e);
         }
@@ -134,7 +135,6 @@ function Terminal({loggedIn,userRole,handleLogout}) {
 
   ///links
 
-
   const ViewerLinks = {
     emp: {
       get: { nav: "/employee/get" },
@@ -163,13 +163,18 @@ function Terminal({loggedIn,userRole,handleLogout}) {
       get: { nav: "/relation/get" },
       id: { nav: "/relation/get/:id" },
     },
-  
+
     this: {
       home: { nav: "/" },
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
-      logout:{fx:()=>{handleLogout();navigate("/")}}
+      logout: {
+        fx: () => {
+          handleLogout();
+          navigate("/");
+        },
+      },
     },
   };
   const AdminLinks = {
@@ -223,54 +228,61 @@ function Terminal({loggedIn,userRole,handleLogout}) {
       delete: { nav: "/relation/delete/:id" },
     },
     org: {
-      get:{nav:"/admin/org/get"},
+      get: { nav: "/admin/org/get" },
       edit: { nav: "/admin/org/edit" },
       delete: { nav: "/admin/org/delete" },
     },
-  
+
     this: {
       home: { nav: "/" },
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
-      logout:{fx:()=>{handleLogout();navigate("/")}}
+      logout: {
+        fx: () => {
+          handleLogout();
+          navigate("/");
+        },
+      },
     },
   };
-  
-  const GovLinks={
-  
+  const GovLinks = {
     org: {
       create: { nav: "/gov/org/create" },
       edit: { nav: "/gov/org/edit/:id" },
       delete: { nav: "/gov/org/delete/:id" },
-      view:{nav:"/gov/org/get"}
+      view: { nav: "/gov/org/get" },
     },
-  
-  this: {
+
+    this: {
       home: { nav: "/" },
       menu: { nav: "/menu" },
       loader: { nav: "/loader" },
       exit: { fx: () => setIsActive(false) },
-      logout:{fx:()=>{handleLogout();navigate("/")}}
+      logout: {
+        fx: () => {
+          handleLogout();
+          navigate("/");
+        },
+      },
     },
   };
-  const nonAuthLinks ={
-    
-  this: {
-    home: { nav: "/" },
-    menu: { nav: "/menu" },
-    loader: { nav: "/loader" },
-    exit: { fx: () => setIsActive(false) },
-    login:{nav:"/auth/login"},
-    signup:{nav:"/auth/signup"}
-  },
-  }
-  const directory={
-    viewer:ViewerLinks,
-    admin:AdminLinks,
-    governer:GovLinks,
-  }
-  const links = loggedIn?directory[userRole]:nonAuthLinks;
+  const nonAuthLinks = {
+    this: {
+      home: { nav: "/" },
+      menu: { nav: "/menu" },
+      loader: { nav: "/loader" },
+      exit: { fx: () => setIsActive(false) },
+      login: { nav: "/auth/login" },
+      signup: { nav: "/auth/signup" },
+    },
+  };
+  const directory = {
+    viewer: ViewerLinks,
+    admin: AdminLinks,
+    governer: GovLinks,
+  };
+  const links = loggedIn && userRole ? directory[userRole] : nonAuthLinks;
   ////////
 
   function acceptSuggestion() {
@@ -295,7 +307,6 @@ function Terminal({loggedIn,userRole,handleLogout}) {
           .split(" ")
           .slice(1)
           .filter((e) => e != "");
-        console.log(var_, values_);
         let nav_ = cmd.nav;
         for (let i in var_) {
           nav_ = nav_.replaceAll(var_[i], values_[i]);
@@ -359,14 +370,14 @@ function Terminal({loggedIn,userRole,handleLogout}) {
         )}
 
         <div className="flex items-center gap-2 p-3 bg-black transition-all *:!transition-all text-white m-3 rounded-xl">
-          <div className={isValid ? "ms-4" : ""}>
+          <div className={isValid ? "ms-4" : "d-center gap-2"}>
             <TerminalIcon {...{ isValid, terminalFocused }} />
           </div>
           <div className="relative w-full d-center">
             <input
               type="text"
               value={bestSugg_}
-              onChange={()=>{}}
+              onChange={() => {}}
               className="absolute  left-0 pointer-events-none !border-none !bg-transparent !p-0 !ps-3 !outline-none !text-gray font-code"
             />
             <input
@@ -388,6 +399,14 @@ function Terminal({loggedIn,userRole,handleLogout}) {
               className="absolute left-0 !border-none !bg-transparent !p-0 !ps-3 !outline-none !text-white font-code"
             />
           </div>
+          <div className="w-1 min-h-full h-5 rounded-full bg-gray-700"></div>
+          <div className="flex font-code text-sm">
+              <div className="min-left">
+                {addDigits(Math.floor(secsLeft / 60),2)}
+              </div>
+              <div className="sep">:</div>
+              <div className="sec-left">{addDigits(secsLeft % 60,2)}</div>
+            </div>
         </div>
       </div>
     )

@@ -1,11 +1,12 @@
 // File: src/components/Section/SectionDelete.jsx
 
 import React, { useEffect, useState } from "react";
-import { FaInfoCircle, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import branch from "../../utils/branch";
 import section from "../../utils/section";
 import Info from "../utils/Info";
+import { toastThis } from "../../utils/fx";
 const SectionDelete = () => {
   const params = useParams();
   const branch_id = params["branch_id"];
@@ -14,10 +15,15 @@ const SectionDelete = () => {
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    section
-      ._delete(branch_id, section_id)
-      .then(() => navigate(`/branch/get/${branch_id}`))
-      .catch((error) => console.error("Error deleting section:", error));
+    toastThis(
+      () => section._delete(branch_id, section_id),
+      () => navigate(`/branch/get/${branch_id}`),
+      {
+        pending: `Deleting section ${section_id} in ${branch_id}`,
+        error: `Error Deleting section ${section_id} in ${branch_id}`,
+        success: `Section ${section_id} in ${branch_id} created succesfully`,
+      }
+    );
   };
   const [branch_, setBranch_] = useState({});
   const [section_, setSection_] = useState({});

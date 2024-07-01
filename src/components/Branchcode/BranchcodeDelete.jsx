@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import branchcode from "../../utils/branchcode";
+import { toastThis } from "../../utils/fx";
 
 const BranchcodeDelete = () => {
   const branch_code = useParams()["branch_code"];
@@ -14,8 +15,12 @@ const BranchcodeDelete = () => {
   
 
   const handleDelete = async () => {
-    await branchcode._delete(branch_code);
-    navigate("/branchcode/get");
+    toastThis(()=>branchcode._delete(branch_code),()=>
+    navigate("/branchcode/get"),{
+      pending:`Deleting BranchCode ${branchCode}`,
+      error:`Error deleting BranchCode ${branchCode}`,
+      success:`BranchCode ${branchCode} deleted successfully`
+    })
   };
 
   return (

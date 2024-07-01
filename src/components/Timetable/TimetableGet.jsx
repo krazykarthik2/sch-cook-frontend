@@ -68,7 +68,6 @@ const TimetableGet = () => {
   const [hideEmpid, setHideEmpid] = useState(false);
   const [hideEmpName, setHideEmpName] = useState(false);
   const [hideSubName, setHideSubName] = useState(false);
-  window._ = { subjects, relations, employees, timetable__ };
   useEffect(() => {
     if (not_exist == false)
       if (timetable__)

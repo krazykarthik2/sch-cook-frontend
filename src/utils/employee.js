@@ -7,7 +7,6 @@ async function create({ name, emp_id }) {
   return await axios.post(URLbase + `/employee/create`, opt);
 }
 async function getSome(arr) {
-  window.unique = unique;
   return await axios.post(URLbase + `/employee/get`, { get: unique(arr) });
 }
 async function getAll(arr) {
@@ -24,6 +23,9 @@ async function edit(id, { name }) {
 async function schedule_get(id) {
   return await axios.get(URLbase + `/employee/timetable/get/${id}`);
 }
+async function _delete(id){
+  return await axios.delete(URLbase + `/employee/delete/${id}`);
+}
 const schedule = { get: schedule_get };
-const employee = { create, get, getAll, edit, schedule };
+const employee = { create, get, getAll, edit, schedule,_delete };
 export default employee;

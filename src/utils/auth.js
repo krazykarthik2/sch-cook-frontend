@@ -1,11 +1,8 @@
 import axios from "axios";
 import backend from "./backend.js";
 
-window.def = axios.defaults;
-window.axios = axios
 
 const URLbase = backend.URLbase;
-window.def = axios.defaults;
 // Function to login
 async function login(username, password) {
   const params = {

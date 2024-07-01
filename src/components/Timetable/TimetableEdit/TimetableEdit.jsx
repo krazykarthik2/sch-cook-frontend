@@ -9,6 +9,7 @@ import timetable from "../../../utils/timetable";
 import Table_Data from "../../utils/Table_Data";
 import Cell, { Empty } from "./Cell";
 import ShowSubjects from "./ShowSubjects";
+import { toastThis } from "../../../utils/fx";
 const dummy = {
   MON: [null, null, null, null, null, null, null, null],
   TUE: [null, null, null, null, null, null, null, null],
@@ -61,7 +62,6 @@ const TimetableEdit = () => {
   }, [timetable__, timetable_edited]);
 
   const navigate = useNavigate();
-  window._ = { subjects, relations, employees, timetable__, emp_schedules };
   useEffect(() => {
     setT_Edited(() => {
       if (!timetable__) return;
@@ -76,16 +76,18 @@ const TimetableEdit = () => {
     });
   }, [timetable__]);
 
-  useEffect(() => {//getting__all_subjects
-    if (not_exist !=null)
+  useEffect(() => {
+    //getting__all_subjects
+    if (not_exist != null)
       if (timetable__)
         subject.getAll().then((response) => {
           if (response) setSubjects(response.data);
         });
   }, [timetable__]);
 
-  useEffect(() => {//getting_all_emp_relations
-    if (not_exist!=null) 
+  useEffect(() => {
+    //getting_all_emp_relations
+    if (not_exist != null)
       if (timetable__)
         emprelation
           .getAll({
@@ -97,7 +99,8 @@ const TimetableEdit = () => {
           });
   }, [timetable__]);
 
-  useEffect(() => {//getting_emp_by_relations
+  useEffect(() => {
+    //getting_emp_by_relations
     if (relations.length)
       if (relations[0].emp_id)
         employee.getAll(relations.map((e) => e.emp_id)).then((response) => {
@@ -105,7 +108,8 @@ const TimetableEdit = () => {
         });
   }, [relations]);
 
-  useEffect(() => {//getting_emp_schedules
+  useEffect(() => {
+    //getting_emp_schedules
     employees.forEach((__emp) => {
       employee.schedule.get(__emp.emp_id).then((response) => {
         setEmpSch((e) => {
@@ -137,11 +141,19 @@ const TimetableEdit = () => {
   }, [branch_id, section_id]);
 
   function save(callback = () => {}) {
-    timetable.edit(branch_id, section_id, timetable_edited).then((response) => {
-      if (response.data.result == "success") alert("successfully edited");
-      callback();
-      loadTimetable();
-    });
+    toastThis(
+      () => timetable.edit(branch_id, section_id, timetable_edited),
+      (response) => {
+        if (response.data.result == "success") alert("successfully edited");
+        callback();
+        loadTimetable();
+      },
+      {
+        pending: `Modifying Timetable of ${section_id} in ${branch_id}`,
+        error: `Error Modifying Timetable of ${section_id} in ${branch_id}`,
+        success: `Timetable of ${section_id} in ${branch_id} is modified successfully`,
+      }
+    );
   }
   function back() {
     navigate("../get");

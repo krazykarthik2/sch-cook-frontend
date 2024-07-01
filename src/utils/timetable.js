@@ -20,5 +20,10 @@ async function get(branch_id, section_id) {
   const section__ = branch__.sections.find((e) => e.sec_id == section_id);
   return section__.timetable;
 }
-const timetable = { create, edit, get };
+async function _delete(branch_id, section_id) {
+  return axios.delete(
+    `/branch/${branch_id}/section/${section_id}/timetable/delete`
+  );
+}
+const timetable = { create, edit, get,_delete };
 export default timetable;

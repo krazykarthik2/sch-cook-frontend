@@ -3,6 +3,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import timetable from "../../utils/timetable";
+import {toastThis } from "../../utils/fx"
 const TimetableDelete = () => {
   const { branch_id, section_id } = useParams();
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import branch from "../../utils/branch";
+import { toastThis } from "../../utils/fx";
 import section from "../../utils/section";
 
 const SectionEdit = () => {

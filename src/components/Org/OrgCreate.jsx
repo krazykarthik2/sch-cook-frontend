@@ -25,9 +25,9 @@ const OrgCreate = () => {
         () => {
         },
         {
-          pending: `Creating Organization ${id}`,
-          error: `Error creating organization ${id}`,
-          success: `Organization ${id} created successfully`,
+          pending: `Creating Organization ${organizationId}`,
+          error: `Error creating organization ${organizationId}`,
+          success: `Organization ${organizationId} created successfully`,
         }
       );
   
